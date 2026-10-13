@@ -1,0 +1,136 @@
+<ion-content class="login-page-content">
+  <div class="premium-bg-wrapper">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  @if (showloader()) {
+  <div class="login-loader-overlay" aria-live="polite" aria-busy="true">
+    <div class="login-loader-card">
+      <ion-spinner name="crescent"></ion-spinner>
+      <div class="login-loader-title">{{ 'Signing You In' | translate }}</div>
+      <div class="login-loader-text">{{ loaderMessage() }}</div>
+    </div>
+  </div>
+  }
+
+  <div class="login-main-container">
+    <div class="brand-section">
+      <div class="help-btn-wrapper" (click)="goToHelp()">
+        <ion-icon name="help-circle-outline"></ion-icon>
+        <span>{{ 'Help' | translate }}</span>
+      </div>
+      <div class="logo-container">
+        <div class="logo-backdrop"></div>
+        <div class="inner-logo">
+          <img src="assets/icons/icon-256.webp" alt="Bambus HRMS" class="logo-image" />
+        </div>
+      </div>
+      <h1 class="brand-title">
+        Bambus <span class="highlight">HRMS</span>
+      </h1>
+      <p class="brand-subtitle">{{ 'Attendance, employees, and HR workflows in one place.' | translate }}</p>
+    </div>
+
+    <div class="glass-card">
+      @if (loginNotice()) {
+      <div class="login-notice-banner" [class.license-banner-critical]="isCriticalLicenseState()"
+        [class.license-banner-warning]="!isCriticalLicenseState()">
+        <div class="login-notice-banner-copy">
+          <ion-icon [name]="licenseBannerIcon()"></ion-icon>
+          <span>{{ loginNotice() }}</span>
+        </div>
+        @if (showRenewActionInLoginNotice()) {
+        <button type="button" class="action-btn renew-license-btn inline-renew-license-btn" (click)="goToRenewal()">
+          {{ loginLicenseActionLabel() }}
+        </button>
+        }
+      </div>
+      }
+
+      @if (!loginNotice() && visibleLicenseBannerMessage()) {
+      <div class="login-notice-banner" [class.license-banner-critical]="isCriticalLicenseState()"
+        [class.license-banner-warning]="!isCriticalLicenseState()">
+        <div class="login-notice-banner-copy">
+          <ion-icon [name]="licenseBannerIcon()"></ion-icon>
+          <span>{{ visibleLicenseBannerMessage() }}</span>
+        </div>
+        @if (showRenewActionInLicenseBanner()) {
+        <button type="button" class="action-btn renew-license-btn inline-renew-license-btn" (click)="goToRenewal()">
+          {{ loginLicenseActionLabel() }}
+        </button>
+        }
+      </div>
+      }
+
+      <div class="card-header">
+        <h2 class="card-title">{{ 'Login' | translate }}</h2>
+        <p class="card-subtitle">{{ 'Existing employees can quickly unlock their HR workspace with a secure PIN.' |
+          translate }}</p>
+      </div>
+
+      @if (authModeInitialized() && !authBootstrapPending() && activeAuthMode() === 'pin') {
+      <div class="auth-section pin-mode">
+        @if (isPlan3OrAbove() && availableCompanies().length > 0) {
+        <div class="input-group-premium">
+          <label>{{ 'Switch Company' | translate }}</label>
+          <div class="input-field-wrapper">
+            <ion-icon name="swap-horizontal-outline" class="field-icon"></ion-icon>
+            <ion-select [ngModel]="selectedSwitchCompanyName()" (ngModelChange)="selectedSwitchCompanyName.set($event)" (ionChange)="onCompanySelectChange()"
+              interface="action-sheet" [placeholder]="'Select company' | translate" class="clean-input">
+              @for (c of availableCompanies(); track c) {
+              <ion-select-option [value]="c.company_name">
+                {{c.company_name}}
+              </ion-select-option>
+              }
+            </ion-select>
+          </div>
+        </div>
+        }
+        @if (multiUserEnabled()) {
+        <div class="input-group-premium">
+          <label>{{ 'Company Name' | translate }}</label>
+          <div class="input-field-wrapper locked-field">
+            <ion-icon name="briefcase-outline" class="field-icon"></ion-icon>
+            <ion-input [ngModel]="pinBusinessName()" (ngModelChange)="pinBusinessName.set($event)" (ionBlur)="onPinBusinessChange()"
+              [placeholder]="'Company Name' | translate" class="clean-input" readonly></ion-input>
+          </div>
+        </div>
+        }
+        @if (multiUserEnabled()) {
+        <div class="input-group-premium">
+          <label>{{ 'Select User' | translate }}</label>
+          <div class="input-field-wrapper">
+            <ion-icon name="people-outline" class="field-icon"></ion-icon>
+            <ion-select [ngModel]="selectedPinUserId()" (ngModelChange)="selectedPinUserId.set($event)" (ionChange)="onUserSelectChange()" interface="action-sheet"
+              [placeholder]="'Choose user' | translate" class="clean-input">
+              @for (u of pinUsers(); track u) {
+              <ion-select-option [value]="u.id">
+                {{u.name}} ({{u.email}})
+              </ion-select-option>
+              }
+            </ion-select>
+          </div>
+        </div>
+        }
+        <div class="pin-display-wrapper">
+          <div class="pin-label">{{ multiUserEnabled() ? ('Enter Access PIN' | translate) : ('Enter MPIN' | translate) }}
+          </div>
+          <input type="password" (keyup.enter)="loginWithPin()" pattern="[0-9]*" inputmode="numeric" [(ngModel)]="pin"
+            maxlength="4" class="premium-pin-input" placeholder="• • • •">
+        </div>
+        <div class="recovery-link" (click)="handleForgotPin()">
+          <span>{{ 'Forgot PIN?' | translate }}</span>
+        </div>
+        <button class="action-btn primary-action" (click)="loginWithPin()" [disabled]="isPinAuthenticating()">
+          <span class="btn-text">{{ isPinAuthenticating() ? ('Unlocking...' | translate) : ('Unlock System' | translate)
+            }}</span>
+          <ion-icon name="lock-open-outline"></ion-icon>
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</ion-content>

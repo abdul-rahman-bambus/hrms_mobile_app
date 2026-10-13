@@ -1,0 +1,82 @@
+[
+	{
+		"pkg": "@anuradev/capacitor-background-mode",
+		"classpath": "ar.com.anura.plugins.backgroundmode.BackgroundModePlugin"
+	},
+	{
+		"pkg": "@capacitor-community/sqlite",
+		"classpath": "com.getcapacitor.community.database.sqlite.CapacitorSQLitePlugin"
+	},
+	{
+		"pkg": "@capacitor-mlkit/barcode-scanning",
+		"classpath": "io.capawesome.capacitorjs.plugins.mlkit.barcodescanning.BarcodeScannerPlugin"
+	},
+	{
+		"pkg": "@capacitor/app",
+		"classpath": "com.capacitorjs.plugins.app.AppPlugin"
+	},
+	{
+		"pkg": "@capacitor/device",
+		"classpath": "com.capacitorjs.plugins.device.DevicePlugin"
+	},
+	{
+		"pkg": "@capacitor/filesystem",
+		"classpath": "com.capacitorjs.plugins.filesystem.FilesystemPlugin"
+	},
+	{
+		"pkg": "@capacitor/geolocation",
+		"classpath": "com.capacitorjs.plugins.geolocation.GeolocationPlugin"
+	},
+	{
+		"pkg": "@capacitor/haptics",
+		"classpath": "com.capacitorjs.plugins.haptics.HapticsPlugin"
+	},
+	{
+		"pkg": "@capacitor/keyboard",
+		"classpath": "com.capacitorjs.plugins.keyboard.KeyboardPlugin"
+	},
+	{
+		"pkg": "@capacitor/network",
+		"classpath": "com.capacitorjs.plugins.network.NetworkPlugin"
+	},
+	{
+		"pkg": "@capacitor/preferences",
+		"classpath": "com.capacitorjs.plugins.preferences.PreferencesPlugin"
+	},
+	{
+		"pkg": "@capacitor/status-bar",
+		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
+	},
+	{
+		"pkg": "@capgo/camera-preview",
+		"classpath": "app.capgo.capacitor.camera.preview.CameraPreview"
+	},
+	{
+		"pkg": "@capgo/capacitor-keep-awake",
+		"classpath": "ee.forgr.plugin.capacitor_keep_awake.CapacitorKeepAwakePlugin"
+	},
+	{
+		"pkg": "@capgo/capacitor-native-audio",
+		"classpath": "ee.forgr.audio.NativeAudio"
+	},
+	{
+		"pkg": "@capgo/capacitor-nativegeocoder",
+		"classpath": "ee.forgr.capacitor_nativegeocoder.NativeGeocoderPlugin"
+	},
+	{
+		"pkg": "@capgo/capacitor-speech-synthesis",
+		"classpath": "ee.forgr.plugin.speechsynthesis.SpeechSynthesisPlugin"
+	},
+	{
+		"pkg": "capacitor-face-recognition-tflite",
+		"classpath": "com.andrew.face.FaceRecognitionPlugin"
+	},
+	{
+		"pkg": "capacitor-native-settings",
+		"classpath": "nl.raphael.settings.NativeSettingsPlugin"
+	},
+	{
+		"pkg": "capacitor-razorpay",
+		"classpath": "com.ionicframework.capacitor.Checkout"
+	}
+]

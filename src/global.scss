@@ -34,43 +34,197 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
-
-ion-header,ion-footer{
-    ion-toolbar{
-        --background:rgb(61, 58, 58);
-        color:wheat;
-        // height: 80px;
-        // ion-title{
-        //     // padding-top:40px;
-        //     text-align: center;
-        // }
-        // ion-buttons{
-        //     margin-top:40px;
-        // }
-    }
-   
-    
-    
+// @import '@ionic/angular/css/palettes/dark.system.css';
+:root {
+  --ion-font-family: 'Ubuntu', 'Segoe UI', sans-serif;
+  --app-header-background: #388E3C;
+  --app-header-color: #ffffff;
 }
 
-ion-header,ion-footer {
+
+/* Optional: Apply globally to all text elements */
+body,
+ion-app,
+ion-content,
+ion-label,
+ion-title,
+ion-text {
+  font-family: 'Ubuntu', 'Segoe UI', sans-serif !important;
+}
+
+ion-header {
   ion-toolbar {
-    // --min-height: 56px; /* Ensure minimum height for the toolbar */
+    --background: var(--app-header-background);
+    --color: var(--app-header-color);
+    color: var(--app-header-color);
 
-    // ion-title {
-    //   // Standardizes the title size and position
-    //   font-size: 1.2rem;
-    //   padding: 0 10px;
-    //   position: absolute; /* Ensures it sits over the content */
-    //   top: 50%;
-    //   left: 50%;
-    //   transform: translate(-50%, -50%); /* Centers it perfectly */
-    // }
-
-    // This ensures buttons/icons are vertically aligned as well
     ion-buttons {
-      align-items: center; 
+      align-items: center;
+
+
+
+    }
+
+    ion-title {
+      font-size: 16px !important;
     }
   }
+
+
+
+}
+
+ion-footer {
+  ion-toolbar {
+    ion-buttons {
+      align-items: center;
+    }
+
+    ion-title {
+      font-size: 16px !important;
+    }
+  }
+}
+
+
+/*
+Source - https://stackoverflow.com/questions/46972950/ionic-make-modal-page-fit-content-height
+Posted by Siddhartha Mukherjee
+Retrieved 2025-11-06, License - CC BY-SA 4.0
+*/
+
+.auth_modal {
+  --width: 80%;
+  /* Adjust width */
+  --height: 90%;
+  /* Adjust height */
+}
+
+
+.employee-sync {
+  --spinner-color: #4fc3f7;
+  /* spinner color */
+  // --background: rgba(30, 30, 30, 0.9);
+  /* dark translucent background */
+  // --color: #fff;
+  /* text color */
+
+  /* Optional: add rounded corners, shadow, etc. */
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Make the spinner larger */
+.employee-sync .loading-spinner {
+  transform: scale(1.4);
+}
+
+.logoutAlert,
+.logout-alert {
+  .alert-wrapper {
+    // background-color: #d7e41a !important;
+
+    .alert-title,.alert-message {
+      color: black !important;
+    }
+  }
+
+  .logout-cancel-button {
+    color: #061103 !important;
+    font-weight: 600;
+  }
+
+  .logout-confirm-button,
+  .logoutlogut {
+    background: #061103 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+  }
+}
+
+.logout-cancel-button {
+  color: rgb(255, 17, 0) !important;
+  font-weight: 600;
+}
+
+.logout-confirm-button {
+  background: #8e8e93 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: transparent !important;
+  }
+}
+
+ion-popover.home-actions-popover::part(content) {
+  border-radius: 18px;
+  min-width: 200px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+}
+
+.home-actions-list {
+  padding: 0.45rem;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.home-actions-list ion-item {
+  --background: transparent;
+  --color: #1f2937;
+  --padding-start: 0.95rem;
+  --inner-padding-end: 0.95rem;
+  --min-height: 44px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 14px;
+}
+
+.home-actions-list ion-item::part(native) {
+  border-radius: 14px;
+}
+
+.home-actions-list ion-item:hover,
+.home-actions-list ion-item:active {
+  --background: #f3f4f6;
+}
+
+.home-actions-list .danger-item {
+  --color: #c62828;
+}
+
+ion-modal#detectionStatus {
+  --width: 100% !important;
+  --min-width: 100% !important;
+  --max-width: 100% !important;
+  --height: 100% !important;
+  --min-height: 100% !important;
+  --max-height: 100% !important;
+  --border-radius: 0 !important;
+  --box-shadow: none !important;
+}
+
+ion-modal#detectionStatus::part(content) {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  inset: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+ion-modal#detectionStatus::part(backdrop) {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+ion-modal.overlay-hidden, 
+ion-modal.overlay-hidden::part(content) {
+  pointer-events: none !important;
+  display: none !important;
 }

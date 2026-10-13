@@ -1,0 +1,100 @@
+<ion-header class="ion-no-border renewal-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="returnToRoute()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'Renew Plan' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="renewal-content">
+  <div class="renewal-shell">
+    <div class="renewal-card">
+      <div class="hero-chip">{{ 'License Renewal' | translate }}</div>
+      <h1>{{ companyName() }}</h1>
+      <p class="hero-subtitle">{{ 'Renew your subscription.' | translate }}</p>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="label">{{ 'Current Plan' | translate }}</span>
+          <span class="value">{{ currentPlanName() }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">{{ 'Expiry Date' | translate }}</span>
+          <span class="value">{{ displayExpiryDate() }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">{{ 'License Status' | translate }}</span>
+          <span class="value">{{ licenseStatusDisplayLabel() | translate }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">{{ 'Subtotal' | translate }}</span>
+          <span class="value">{{ formatPlanSubtotal(selectedPlan()) }}</span>
+        </div>
+        @if (resolvePlanTaxAmount(selectedPlan()) > 0) {
+        <div class="detail-item">
+          <span class="label">{{ 'Tax' | translate }}</span>
+          <span class="value">{{ formatPlanTax(selectedPlan()) }}</span>
+        </div>
+        }
+        <div class="detail-item total-item">
+          <span class="label">{{ 'Total' | translate }}</span>
+          <span class="value">{{ formatPlanAmount(selectedPlan()) }}</span>
+        </div>
+      </div>
+
+      <div class="plans-section">
+        <div class="plans-header">
+          <span class="plans-title">{{ 'Available Plans' | translate }}</span>
+          @if (isLoadingPlans()) {
+          <span class="plans-loading">{{ 'Loading plans...' | translate }}</span>
+          }
+        </div>
+
+        @if (!isLoadingPlans() && plans().length === 0) {
+        <div class="plans-empty">
+          Plans are unavailable right now.
+        </div>
+        }
+
+        @for (plan of plans(); track plan.code) {
+        <button type="button" class="plan-card" [class.current]="isCurrentPlan(plan)"
+          [class.selected]="isSelectedPlan(plan)" (click)="selectPlan(plan)">
+          <div class="plan-main">
+            <div class="plan-topline">
+              <span class="plan-name">{{ plan.name }}</span>
+              @if (isCurrentPlan(plan)) {
+              <span class="plan-badge">{{ 'Current' | translate }}</span>
+              }
+            </div>
+            <div class="plan-code">{{ plan.code }}</div>
+            @if (plan.description) {
+            <div class="plan-description">{{ plan.description }}</div>
+            }
+          </div>
+          <div class="plan-price">
+            <span class="amount">{{ formatPlanAmount(plan) }}</span>
+            @if (formatPlanCaption(plan)) {
+            <span class="caption">{{ formatPlanCaption(plan) }}</span>
+            }
+          </div>
+        </button>
+        }
+      </div>
+
+      <div class="demo-note">
+        Payment will use the amount of the selected plan, then initialize with Bambus SaaS Master before checkout and
+        capture after checkout completes.
+      </div>
+
+      <ion-button expand="block" class="pay-btn" (click)="startPayment()" [disabled]="!canStartPayment()">
+        @if (isPaying()) {
+        <ion-spinner name="crescent"></ion-spinner>
+        }
+        @if (!isPaying()) {
+        <span>{{ 'Pay' | translate }}</span>
+        }
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

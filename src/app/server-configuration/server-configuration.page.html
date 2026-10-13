@@ -1,0 +1,63 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="detail-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'Server Configuration' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="detail-page-content">
+  <div class="detail-page-shell">
+    <div class="detail-hero">
+      <div class="hero-icon">
+        <ion-icon name="server-outline"></ion-icon>
+      </div>
+      <h1>{{ 'Server Configuration' | translate }}</h1>
+      <p>{{ 'Connection details are taken from your registered HRMS tenant and kept read-only here, just like the POS flow.' | translate }}</p>
+    </div>
+
+    <ion-card class="detail-card">
+      <ion-card-header>
+        <ion-card-title>{{ 'Saved Tenant Connection' | translate }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none" class="detail-item">
+          <ion-label position="stacked">{{ 'Plan Code' | translate }}</ion-label>
+          <ion-input [value]="planDisplayLabel() | translate" readonly="true"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="detail-item">
+          <ion-label position="stacked">{{ 'Server URL' | translate }}</ion-label>
+          <ion-input [value]="configUrl() || ('Not configured' | translate)" readonly="true"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="detail-item">
+          <ion-label position="stacked">{{ 'Database Name' | translate }}</ion-label>
+          <ion-input [value]="configDatabase() || ('Not configured' | translate)" readonly="true"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="detail-item">
+          <ion-label position="stacked">{{ 'Company Name' | translate }}</ion-label>
+          <ion-input [value]="configCompanyName() || selectedCompanyName() || ('Not configured' | translate)"
+            readonly="true"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="detail-item">
+          <ion-label position="stacked">{{ 'Username' | translate }}</ion-label>
+          <ion-input [value]="configUsername() || ('Not configured' | translate)" readonly="true"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="detail-item">
+          <ion-label position="stacked">{{ 'Password' | translate }}</ion-label>
+          <ion-input [value]="maskedPassword() | translate" readonly="true"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="detail-item">
+          <ion-label position="stacked">{{ 'Sync Delay' | translate }}</ion-label>
+          <ion-input [value]="syncDelay() || ('Not configured' | translate)" readonly="true"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

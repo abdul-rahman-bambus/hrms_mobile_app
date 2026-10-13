@@ -1,0 +1,103 @@
+<ion-header [translucent]="true" class="ion-no-border fabulous-dark-content">
+  <ion-toolbar>
+    <ion-title class="header-title">
+      <div class="employee-info">
+        <h2 class="employee-name">{{ attendanceData()?.employee_name }}</h2>
+        <p class="attendance-date">
+          {{ attendanceData()?.check_in || attendanceData()?.check_out | date: 'fullDate' }}
+        </p>
+      </div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="dismiss()" class="close-btn">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="popup-content fade-in">
+  <div class="attendance-wrapper">
+
+    <!-- Check-in Card -->
+    <div class="detail-card card-checkin slide-up">
+      <div class="card-header">
+        <ion-icon name="log-in-outline" class="icon"></ion-icon>
+        <span>Check-in</span>
+      </div>
+      <div class="card-body">
+        <h3 class="time">
+          @if (attendanceData()?.display_check_in) {
+            {{ attendanceData()?.check_in | date: 'shortTime' }}
+          } @else {
+            -
+          }
+        </h3>
+        <div class="location-block">
+          <ion-icon name="location-outline"></ion-icon>
+          <p>
+            @if (isCheckInAddressLoading()) {
+              Resolving approximate address...
+            } @else {
+              {{ checkInAddress() }}
+            }
+          </p>
+        </div>
+        <div class="photo-container">
+          @if (getFaceImageSrc(attendanceData()?.recognized_face_checkin); as checkInPhotoSrc) {
+            <img [src]="checkInPhotoSrc" alt="Check-in Photo" class="photo" />
+          } @else {
+            <span class="no-photo">No Photo</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Check-out Card -->
+    <div class="detail-card card-checkout slide-up">
+      <div class="card-header">
+        <ion-icon name="log-out-outline" class="icon"></ion-icon>
+        <span>Check-out</span>
+      </div>
+      <div class="card-body">
+        <h3 class="time">
+          @if (attendanceData()?.display_check_out) {
+            {{ attendanceData()?.check_out? (attendanceData()?.check_out | date: 'shortTime'):"-" }}
+          } @else {
+            -
+          }
+        </h3>
+        <div class="location-block">
+          <ion-icon name="location-outline"></ion-icon>
+          <p>
+            @if (isCheckOutAddressLoading()) {
+              Resolving approximate address...
+            } @else {
+              {{ checkOutAddress() }}
+            }
+          </p>
+        </div>
+        <div class="photo-container">
+          @if (getFaceImageSrc(attendanceData()?.recognized_face_checkout); as checkOutPhotoSrc) {
+            <img [src]="checkOutPhotoSrc" alt="Check-out Photo" class="photo" />
+          } @else {
+            <span class="no-photo">No Photo</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Worked Hours -->
+    <div class="detail-card card-hours slide-up">
+      <div class="card-header">
+        <ion-icon name="time-outline" class="icon"></ion-icon>
+        <span>Worked Hours</span>
+      </div>
+      <div class="worked-body">
+        {{ attendanceData()?.display_worked_hours || '-' }}
+      </div>
+    </div>
+
+  </div>
+</ion-content>

@@ -1,0 +1,132 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+// @import '@ionic/angular/css/palettes/dark.system.css';
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+
+
+:root {
+  --ion-font-family: 'Ubuntu', sans-serif;
+}
+
+
+/* Optional: Apply globally to all text elements */
+body,
+ion-app,
+ion-content,
+ion-label,
+ion-title,
+ion-text {
+  font-family: 'Ubuntu', sans-serif !important;
+}
+
+ion-header,
+ion-footer {
+  ion-toolbar {
+    // --background: rgb(61, 58, 58);
+    // color: rgb(215, 201, 201);
+
+    ion-buttons {
+      align-items: center;
+
+
+
+    }
+
+    ion-title {
+      font-size: 16px !important;
+    }
+  }
+
+
+
+}
+
+
+/*
+Source - https://stackoverflow.com/questions/46972950/ionic-make-modal-page-fit-content-height
+Posted by Siddhartha Mukherjee
+Retrieved 2025-11-06, License - CC BY-SA 4.0
+*/
+
+.auth_modal {
+  --width: 80%;
+  /* Adjust width */
+  --height: 90%;
+  /* Adjust height */
+}
+
+
+.employee-sync {
+  --spinner-color: #4fc3f7;
+  /* spinner color */
+  // --background: rgba(30, 30, 30, 0.9);
+  /* dark translucent background */
+  // --color: #fff;
+  /* text color */
+
+  /* Optional: add rounded corners, shadow, etc. */
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Make the spinner larger */
+.employee-sync .loading-spinner {
+  transform: scale(1.4);
+}
+
+.logoutAlert {
+  .alert-wrapper {
+    // background-color: #d7e41a !important;
+
+    .alert-title,.alert-message {
+      color: black !important;
+    }
+    // .logoutCancel{
+    //    color:white !important;
+    // }
+    .logoutlogut{
+      color:rgb(255, 17, 0) !important;
+    }
+
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: transparent !important;
+  }
+}

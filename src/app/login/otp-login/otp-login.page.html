@@ -1,0 +1,321 @@
+<ion-content class="login-page-content">
+  <div class="premium-bg-wrapper">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  @if (showloader()) {
+  <div class="login-loader-overlay" aria-live="polite" aria-busy="true">
+    <div class="login-loader-card">
+      <ion-spinner name="crescent"></ion-spinner>
+      <div class="login-loader-title">{{ 'Signing You In' | translate }}</div>
+      <div class="login-loader-text">{{ loaderMessage() | translate }}</div>
+    </div>
+  </div>
+  }
+
+  <div class="login-main-container">
+    <div class="brand-section">
+      <div class="help-btn-wrapper" (click)="goToHelp()">
+        <ion-icon name="help-circle-outline"></ion-icon>
+        <span>{{ 'Help' | translate }}</span>
+      </div>
+      <div class="logo-container">
+        <div class="logo-backdrop"></div>
+        <div class="inner-logo">
+          <img src="assets/icons/icon-256.webp" alt="Bambus HRMS" class="logo-image" />
+        </div>
+      </div>
+      <h1 class="brand-title">
+        Bambus <span class="highlight">HRMS</span>
+      </h1>
+      <p class="brand-subtitle">{{ 'Attendance, employees, and HR workflows in one place.' | translate }}</p>
+    </div>
+
+    <div class="glass-card">
+      @if (loginNotice()) {
+      <div class="login-notice-banner" [class.license-banner-critical]="isCriticalLicenseState()"
+        [class.license-banner-warning]="!isCriticalLicenseState()">
+        <div class="login-notice-banner-copy">
+          <ion-icon [name]="licenseBannerIcon()"></ion-icon>
+          <span>{{ loginNotice() }}</span>
+        </div>
+        @if (showRenewActionInLoginNotice()) {
+        <button type="button" class="action-btn renew-license-btn inline-renew-license-btn" (click)="goToRenewal()">
+          {{ loginLicenseActionLabel() }}
+        </button>
+        }
+      </div>
+      }
+
+      @if (!loginNotice() && visibleLicenseBannerMessage()) {
+      <div class="login-notice-banner" [class.license-banner-critical]="isCriticalLicenseState()"
+        [class.license-banner-warning]="!isCriticalLicenseState()">
+        <div class="login-notice-banner-copy">
+          <ion-icon [name]="licenseBannerIcon()"></ion-icon>
+          <span>{{ visibleLicenseBannerMessage() }}</span>
+        </div>
+        @if (showRenewActionInLicenseBanner()) {
+        <button type="button" class="action-btn renew-license-btn inline-renew-license-btn" (click)="goToRenewal()">
+          {{ loginLicenseActionLabel() }}
+        </button>
+        }
+      </div>
+      }
+
+      <div class="card-header">
+        <h2 class="card-title">{{ 'Login' | translate }}</h2>
+        <p class="card-subtitle">
+          {{ freshLoginStage() === 'identifier'
+          ? ('Use your work email or mobile number to receive a secure sign-in code.' | translate)
+          : ('Confirm your workspace password to continue.' | translate) }}
+        </p>
+      </div>
+
+      @if (authModeInitialized() && !authBootstrapPending() && activeAuthMode() === 'otp') {
+      <div class="auth-section form-mode fresh-install-mode">
+        @if (freshLoginStage() === 'identifier') {
+        <div>
+          <div class="input-group-premium">
+            <label>{{ 'Email Or Mobile' | translate }}</label>
+            <div class="input-field-wrapper">
+              <ion-icon name="mail-open-outline" class="field-icon"></ion-icon>
+              <ion-input [ngModel]="freshIdentifier()" (ngModelChange)="freshIdentifier.set($event)" [ngModelOptions]="{standalone: true}"
+                [placeholder]="'Enter your email or mobile number' | translate" (keyup.enter)="hr_login()"
+                class="clean-input">
+              </ion-input>
+              @if (freshIdentifier().length > 0) {
+              <div class="icon-btn" (click)="freshIdentifier.set('')">
+                <ion-icon name="close-circle-outline"></ion-icon>
+              </div>
+              }
+            </div>
+          </div>
+          <button type="button" class="action-btn primary-action mt-4" (click)="hr_login()" [disabled]="showloader()">
+            <span class="btn-text">{{ 'Request OTP' | translate }}</span>
+            <ion-icon name="paper-plane-outline"></ion-icon>
+          </button>
+        </div>
+        }
+        @if (freshLoginStage() === 'password') {
+        <div>
+          @if (selectedFreshTenant()) {
+          <div class="selected-tenant-banner">
+            <div class="tenant-banner-label">{{ 'Selected Tenant' | translate }}</div>
+            <div class="tenant-banner-title">{{ getFreshTenantLabel(selectedFreshTenant()) }}</div>
+          </div>
+          }
+          <div class="input-group-premium">
+            <label>{{ 'Email / Mobile' | translate }}</label>
+            <div class="input-field-wrapper">
+              <ion-icon name="person-outline" class="field-icon"></ion-icon>
+              <ion-input [ngModel]="freshIdentifier()" (ngModelChange)="freshIdentifier.set($event)" [ngModelOptions]="{standalone: true}" class="clean-input">
+              </ion-input>
+            </div>
+          </div>
+          <div class="input-group-premium">
+            <label>{{ 'Password' | translate }}</label>
+            <div class="input-field-wrapper">
+              <div class="icon-btn" (click)="view_password()">
+                <ion-icon [name]="'lock-closed-outline'" id="eye"></ion-icon>
+              </div>
+              <ion-input type="password" id="password" [ngModel]="freshPassword()" (ngModelChange)="freshPassword.set($event)" [ngModelOptions]="{standalone: true}"
+                [placeholder]="'Password' | translate" (keyup.enter)="hr_login()" class="clean-input">
+              </ion-input>
+            </div>
+            <div class="credential-actions">
+              <button type="button" class="recovery-link recovery-link-btn" (click)="handleForgotPassword()">
+                <span>{{ 'Forgot Password?' | translate }}</span>
+              </button>
+              <button type="button" class="recovery-link recovery-link-btn ion-text-end"
+                (click)="showTenantSelectionModal.set(true)">
+                <span>{{ 'Switch Tenant' | translate }}</span>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="action-btn primary-action mt-4" (click)="hr_login()" [disabled]="showloader()">
+            <span class="btn-text">{{ showloader() ? ('Logging In...' | translate) : ('Log In' | translate) }}</span>
+            <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+          </button>
+        </div>
+        }
+      </div>
+      }
+
+      @if (authModeInitialized() && !authBootstrapPending() && activeAuthMode() === 'otp') {
+      <div class="card-footer">
+        <div class="divider">
+          <span>{{ 'Or' | translate }}</span>
+        </div>
+        <button class="action-btn secondary-action" (click)="goToRegister()">
+          {{ 'Register New Account' | translate }}
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+
+  <ion-modal [isOpen]="showFreshOtpModal()" (didDismiss)="closeFreshOtpModal()" (didPresent)="focusFreshOtpInput()">
+    <ng-template>
+      <ion-content class="ion-padding fresh-otp-modal-content">
+        <div class="fresh-otp-modal-shell">
+          <div class="card-header fresh-otp-hero">
+            <div class="fresh-otp-icon-wrap">
+              <ion-icon name="shield-checkmark-outline" class="fresh-otp-hero-icon"></ion-icon>
+            </div>
+            <div class="fresh-otp-badge">{{ 'One-Time Verification' | translate }}</div>
+            <h2 class="card-title">{{ 'Verify OTP' | translate }}</h2>
+            <p class="card-subtitle">{{ 'Enter the 6-digit OTP sent to your email or mobile number to continue
+              securely.' | translate }}</p>
+            @if (freshIdentifierVerified() || freshIdentifier()) {
+            <div class="fresh-otp-email">
+              {{ freshIdentifierVerified() || freshIdentifier() }}
+            </div>
+            }
+          </div>
+
+          <div class="otp-pin-group fresh-otp-pin-group">
+            <div class="pin-display-wrapper otp-pin-wrapper" (click)="focusFreshOtpInput()">
+              <ion-input #freshOtpInput type="tel" inputmode="numeric" [maxlength]="otpLength"
+                class="hidden-input otp-hidden-input" [ngModel]="freshOtpCode()" [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="onFreshOtpCodeChange($event)" (ionFocus)="freshOtpFocused.set(true)"
+                (ionBlur)="freshOtpFocused.set(false)" (keyup.enter)="submitFreshOtp()">
+              </ion-input>
+
+              <div class="pin-dots-container otp-digits-container">
+                @for (idx of otpIndices; track idx) {
+                <div class="pin-dot-box otp-digit-box" [class.filled]="(freshOtpCode() || '').length > idx"
+                  [class.active]="(freshOtpCode() || '').length === idx && freshOtpFocused()">
+                  @if ((freshOtpCode() || '').length > idx) {
+                  <span class="otp-digit">{{ freshOtpCode()[idx] }}</span>
+                  }
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="info-box fresh-otp-note">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span>{{ freshOtpNoteText() | translate:freshOtpNoteParams() }}</span>
+          </div>
+
+          <div class="otp-timer-chip" [class.expired]="isFreshOtpExpired()">
+            <ion-icon [name]="isFreshOtpExpired() ? 'time-outline' : 'timer-outline'"></ion-icon>
+            <span>{{ freshOtpTimerText() }}</span>
+          </div>
+
+          <div class="otp-resend-row">
+            <ion-button fill="clear" class="otp-resend-btn" [disabled]="!canResendFreshOtp()" (click)="resendFreshOtp()">
+              {{ freshOtpResendText() | translate:freshOtpResendParams() }}
+            </ion-button>
+          </div>
+
+          <div class="fresh-otp-actions">
+            <ion-button expand="block" class="register-btn otp-submit-btn"
+              [disabled]="(freshOtpCode() || '').length !== otpLength || isFreshOtpExpired()" (click)="submitFreshOtp()">
+              {{ 'Verify OTP' | translate }}
+              <ion-icon name="checkmark-outline" slot="end"></ion-icon>
+            </ion-button>
+            <ion-button expand="block" fill="clear" class="fresh-otp-cancel-btn" (click)="closeFreshOtpModal()">
+              {{ 'Cancel' | translate }}
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="showTenantSelectionModal()" (didDismiss)="closeTenantSelectionModal()">
+    <ng-template>
+      <ion-content class="ion-padding tenant-selection-modal-content">
+        <div class="tenant-selection-shell">
+          <div class="card-header tenant-selection-hero">
+            <h2 class="card-title">{{ 'Select Tenant' | translate }}</h2>
+            <p class="card-subtitle">{{ 'Choose the tenant you want to sign in to.' | translate }}</p>
+          </div>
+
+          <div class="tenant-list">
+            @for (tenant of freshTenants(); track tenant) {
+            <button type="button" class="tenant-option" (click)="selectFreshTenant(tenant)">
+              <div class="tenant-option-copy">
+                <div class="tenant-option-title">{{ getFreshTenantLabel(tenant) }}</div>
+                <div class="tenant-option-status" [class.inactive]="isFreshTenantStatusInactive(tenant)">
+                  {{ getFreshTenantStatusLabel(tenant) | translate }}
+                </div>
+              </div>
+            </button>
+            }
+          </div>
+
+          <ion-button expand="block" fill="clear" color="medium" (click)="closeTenantSelectionModal()">
+            {{ 'Cancel' | translate }}
+          </ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="showForgotPasswordModal()" (didDismiss)="closeForgotPasswordModal()">
+    <ng-template>
+      <ion-header class="ion-no-border forgot-password-modal-header">
+        <ion-toolbar class="forgot-password-toolbar">
+          <ion-buttons slot="start">
+            <ion-button class="forgot-password-close-btn" (click)="closeForgotPasswordModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title>{{ 'Reset Password' | translate }}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding forgot-password-modal-content">
+        <div class="forgot-password-shell">
+          <div class="card-header forgot-password-hero">
+            <div class="forgot-password-icon-wrap">
+              <ion-icon name="shield-checkmark-outline" class="reset-icon"></ion-icon>
+            </div>
+            <div class="forgot-password-badge">{{ 'Secure Account Recovery' | translate }}</div>
+            <h2 class="card-title">{{ 'Recover Your Account' | translate }}</h2>
+            <p class="card-subtitle">{{ 'Enter your account email to receive a password reset link.' | translate }}</p>
+          </div>
+
+          <div class="forgot-password-form">
+            <div class="input-group-premium forgot-password-input-group">
+              <label>{{ 'Email Address' | translate }}</label>
+              <div class="input-field-wrapper forgot-password-input">
+                <ion-icon name="mail-open-outline" class="field-icon"></ion-icon>
+                <ion-input [ngModel]="forgotPasswordEmail()" (ngModelChange)="forgotPasswordEmail.set($event)" [ngModelOptions]="{standalone: true}"
+                  [placeholder]="'name@company.com' | translate" type="email">
+                </ion-input>
+              </div>
+            </div>
+
+            <div class="info-box forgot-password-info">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>{{ 'We&apos;ll send a reset link to your registered email address.' | translate }}</span>
+            </div>
+
+            <div class="forgot-password-actions">
+              <button type="button" class="action-btn primary-action forgot-password-submit"
+                (click)="submitForgotPassword()" [disabled]="isForgotPasswordLoading()">
+                @if (isForgotPasswordLoading()) {
+                <ion-spinner name="crescent"></ion-spinner>
+                }
+                @if (!isForgotPasswordLoading()) {
+                <span>{{ 'Send Reset Link' | translate }}</span>
+                }
+              </button>
+
+              <button type="button" class="forgot-password-cancel" (click)="closeForgotPasswordModal()">
+                {{ 'Cancel' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

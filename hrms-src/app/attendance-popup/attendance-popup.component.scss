@@ -1,0 +1,219 @@
+/// =====================================
+// COLOR SYSTEM (Light Theme)
+// =====================================
+$bg-light   : #f5f7fa; // Soft light background
+$card-bg    : #ffffff; // Pure white cards
+$accent     : #2563eb; // Strong primary blue (toolbar text, highlights)
+$accent-glow: #3b82f6; // Lighter blue for effects
+$success    : #10b981; // Green for success
+$danger     : #ef4444; // Red for danger
+$text-dark  : #1f2937; // Dark text for contrast
+$text-muted : #6b7280; // Muted grey text (secondary text, inactive icons)
+$radius     : 16px;
+$shadow     : 0 4px 15px rgba(0, 0, 0, 0.08); // Soft shadow for depth
+$transition : 0.35s cubic-bezier(0.4, 0, 0.2, 1); // Enhanced transition timing
+
+// =====================================
+// PAGE BACKGROUND
+// =====================================
+.fabulous-dark-content {
+  --background    : $bg-light;
+  background      : $bg-light;
+  color           : $text-dark;
+  animation       : fadeIn 0.6s ease both;
+  padding-bottom  : 5px;
+  --padding-top   : 0;
+  --padding-bottom: 0;
+  --padding-start : 0;
+  --padding-end   : 0;
+  overflow-y      : auto;
+}
+
+// =====================================
+// HEADER & TOOLBAR STYLES (Toolbar BG Fixed)
+// =====================================
+ion-header {
+  // Use card-bg (white) for the main header and toolbar background
+  --background: $card-bg;
+  background  : $card-bg;
+  color       : $text-dark;
+  box-shadow  : 0 4px 10px rgba(0, 0, 0, 0.05);
+
+  ion-toolbar {
+    --background    : #388E3C;; // Ensures toolbar color is white
+    // --border-width  : 0;
+    // --padding-top   : 0;
+    // --padding-bottom: 0;
+    // --padding-start : 8px;
+    // --padding-end   : 8px;
+    // min-height      : 56px;
+
+    .header-title {
+      font-weight            : 700;
+      font-size              : 1.25rem;
+      letter-spacing         : 0.5px;
+      // Style to match image: muted color, close to segment text
+      color                  : #fff;
+    }
+
+    ion-button {
+      color         : #fff;
+      --ripple-color: rgba($accent, 0.1);
+      transition    : all $transition;
+
+      ion-icon {
+        font-size: 1.4rem;
+      }
+
+      &:hover,
+      &:active {
+        color    : $accent;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+
+
+}
+
+/* === Layout Wrapper === */
+.attendance-wrapper {
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+  gap           : 20px;
+}
+
+/* === Card Style === */
+.detail-card {
+  width        : 100%;
+  max-width    : 420px;
+  border-radius: 20px;
+  padding      : 18px;
+  background   : #ffffff;
+  box-shadow   : 0 8px 20px rgba(0, 0, 0, 0.08);
+  border       : 1px solid rgba(0, 0, 0, 0.05);
+  transition   : all 0.3s ease;
+
+  &:hover {
+    transform : translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .card-header {
+    display       : flex;
+    align-items   : center;
+    gap           : 8px;
+    color         : #555;
+    font-weight   : 600;
+    font-size     : 0.95rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom : 10px;
+
+    .icon {
+      font-size: 1.3rem;
+      color    : #5a6ff0;
+    }
+  }
+
+  .card-body {
+    text-align: center;
+
+    .time {
+      font-size    : 1.6rem;
+      font-weight  : 700;
+      color        : #111;
+      margin-bottom: 10px;
+    }
+
+    .photo-container {
+      display        : flex;
+      justify-content: center;
+
+      .photo {
+        width        : 120px;
+        height       : 120px;
+        border-radius: 16px;
+        object-fit   : cover;
+        box-shadow   : 0 4px 16px rgba(90, 111, 240, 0.25);
+        transition   : all 0.3s ease;
+      }
+
+      .photo:hover {
+        transform : scale(1.04);
+        box-shadow: 0 6px 22px rgba(90, 111, 240, 0.35);
+      }
+
+      .no-photo {
+        font-size: 0.9rem;
+        color    : #aaa;
+      }
+    }
+  }
+
+  .worked-body {
+    text-align : center;
+    font-size  : 1.5rem;
+    font-weight: 700;
+    color      : #27ae60;
+  }
+}
+
+/* === Card Color Variants === */
+.card-checkin {
+  border-top: 4px solid #5a6ff0;
+}
+
+.card-checkout {
+  border-top: 4px solid #9b59b6;
+}
+
+.card-hours {
+  border-top: 4px solid #27ae60;
+}
+
+/* === Animations === */
+.fade-in {
+  animation: fadeIn 0.7s ease forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity  : 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity  : 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity  : 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity  : 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Footer === */
+.popup-footer {
+  background: transparent;
+
+  .footer-toolbar {
+    border-top     : 1px solid rgba(0, 0, 0, 0.05);
+    background     : rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+  }
+}

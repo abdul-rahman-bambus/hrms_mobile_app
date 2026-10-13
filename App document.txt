@@ -1,0 +1,73 @@
+Services
+EmployeeService, AttendanceService, StorageService.
+
+Login:
+has key credentials
+Has "url","db","login": string,"password","pin","sound" fields
+
+
+Sqlite db name = UserData
+Tables:
+ employees
+ fields -  id ,display_name,image_1024,job_id,is_enrolled,odoo_id,active
+ attendance
+ fields -  id,employee_id,employee_name,check_in,check_out,worked_hours,recognized_face_checkin,recognized_face_checkout,odoo_id,created_at
+
+ Descriptors
+ has key enrollments
+ has [{label:"",descriptor:[],employee_id:2}] like structure
+
+ Current flow:
+    Login:
+        1. Fresh login ask url, login, password. Parallelly local db initialisation and models loading will be done.
+        2. Gets db name from url and attempts login.
+        3. If login successful, it goes for pin setup.
+        4. Pin is stored in credentials itself.
+        5. After setup, it enters enrollments page only for first time.
+        6. On backbutton app will exit.
+        7. When password change detected, automatically go to login page for login with username,password.
+
+    Attendance using face recognition:
+        1. When opening again, app will authenticate odoo and loads models.
+        2. Detects face, compares with descriptors and hit attendance api with the employee id detected from recognition.
+        3. A copy of the attendance record with required fields will be stored in local for future view.
+
+    Settings:
+        1. Url, username,passoword fields are readonly.
+        2. Sound is configurable. 
+        3. Changing mpin has has link in settings.
+
+    Handling network:
+        1. If network is down, app will navigate to offline page.
+        2. Repeatedly hits the recent request for completing the request when online.
+        3. Immediately goes to the recent page when app comes online.
+        4. When server is down, the server down message will be shown to the user.
+
+
+ Flow change for offline working:
+    Login:
+        1. For fresh login, internet is mandatory. The offline condition only meant for loggedin device.
+        2. Prevent repeated hit that used for processing data when come online. If online authentication fails at one hit, then mark the flow as offline. Get network status change api value for correct online status. Stop using offline message page.
+        3. Get the user id from storage and go to home (face attendance) page.
+    Face attendance page:
+        1. Even if the attendance is online or not, attendance copy with utc datetimes should be saved in local before hitting online. For online sync, create method only used, not the custom controller endpoint. 
+        2. When writing offline, create of the last employee record was checked out. Else write the last record with checkout utc time.
+        3. Challenge is identifying last checkin and checkout. (Allow attendance only from mobile.)
+
+
+Offline logic:
+1. Get if the device having network interface or not.
+2. Based on that added condition for network calls based on the fact that if network not available, then the offline credentials/data will be utilized.
+3. Saving attendance logged here as offline data for faster processing.
+4. Network sync is added as cron. The interval duration will be changed after.
+5. The created attendance with the not synced status with no odoo id will be sent for creating in backend.
+6. As well as, if the offline record has odoo_id, then on updating the attendance, the sync status will be reset. Then it will be passed as "to be updated" parameter for updating in backend.
+7. Backend logic completely changed for the flow.
+
+
+changes
+first time : login -> mpin set -> select company (login user's allowed companies) ->Store the selected company ->  go to enrollment page -> enroll -> exit
+next time : select company -> store changes -> attendance page -> employee check is same but additionally check if employee's company is as same as selected company. If not say enrolled.
+    
+
+

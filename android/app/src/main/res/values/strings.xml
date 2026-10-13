@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">HRMS-App</string>
-    <string name="title_activity_main">HRMS-App</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">HRMS</string>
+    <string name="title_activity_main">HRMS</string>
+    <string name="package_name">bambus.hrms.app</string>
+    <string name="custom_url_scheme">bambus.hrms.app</string>
 </resources>

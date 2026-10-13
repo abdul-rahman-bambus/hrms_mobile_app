@@ -1,0 +1,79 @@
+<ion-header class="header-premium">
+  <ion-toolbar class="toolbar-premium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{"CONTACT_US" | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+@if (contactForm) {
+<form [formGroup]="contactForm" (ngSubmit)="submitForm()" style="display: flex; flex-direction: column; height: 100%;">
+  
+  <ion-content class="ion-padding">
+    <div class="form-container">
+      <div class="input-group">
+        <label class="input-label">{{'NAME' | translate}}</label>
+        <input type="text" formControlName="name" class="input-field" placeholder="Ex: Rahul">
+        @if (contactForm.get('name')?.touched && contactForm.get('name')?.invalid) {
+          <small class="error-text">Name is required (min 3 chars)</small>
+        }
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">{{'EMAIL' | translate}}</label>
+        <input type="email" formControlName="email" class="input-field" placeholder="name@company.com">
+        @if (contactForm.get('email')?.touched && contactForm.get('email')?.invalid) {
+          <small class="error-text">Valid email is required</small>
+        }
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">{{'MOBILE_NUMBER' | translate}}</label>
+        <input type="tel" formControlName="mobile" class="input-field" placeholder="9876543210">
+        @if (contactForm.get('mobile')?.touched && contactForm.get('mobile')?.invalid) {
+          <small class="error-text">10-12 digits required (Numbers only)</small>
+        }
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">{{'COMPANY_NAME' | translate}}</label>
+        <input type="text" formControlName="companyName" class="input-field" placeholder="Ex: Acme Corp">
+        @if (contactForm.get('companyName')?.touched && contactForm.get('companyName')?.invalid) {
+          <small class="error-text">Company name (min 2 chars) is required</small>
+        }
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">{{'NO_OF_EMPLOYEES' | translate}}</label>
+        <input type="number" formControlName="employees" class="input-field">
+        @if (contactForm.get('employees')?.touched && contactForm.get('employees')?.invalid) {
+          <small class="error-text">Minimum 1 employee required</small>
+        }
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">{{'COMPANY_ADDRESS' | translate}}</label>
+        <textarea formControlName="address" class="input-field" rows="2"></textarea>
+        @if (contactForm.get('address')?.touched && contactForm.get('address')?.invalid) {
+          <small class="error-text">Address must be at least 10 chars</small>
+        }
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">{{'MESSAGE' | translate}}</label>
+        <textarea formControlName="message" class="input-field" rows="3" placeholder="How can we help you?"></textarea>
+        @if (contactForm.get('message')?.touched && contactForm.get('message')?.invalid) {
+          <small class="error-text">Please enter a short message. Minimum 5 characters</small>
+        }
+      </div>
+    </div>
+  </ion-content>
+
+  <ion-footer class="ion-no-border ion-padding">
+    <button type="submit" class="login-button" [disabled]="contactForm.invalid">
+      {{ 'SUBMIT' | translate }}
+    </button>
+  </ion-footer>
+</form>
+}

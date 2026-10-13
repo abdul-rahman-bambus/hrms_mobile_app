@@ -1,0 +1,140 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="profile-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ "PROFILE" | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="refreshProfile()" [disabled]="loading() || isSyncing()" [attr.aria-label]="'REFRESH_PROFILE' | translate">
+        <ion-icon name="sync-outline" [class.sync-spinning]="isSyncing()"></ion-icon>
+      </ion-button>
+      <ion-menu-toggle menu="global-menu" auto-hide="false">
+        <ion-button fill="clear" aria-label="Open menu">
+          <ion-icon name="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+    @if (loading() || isSyncing()) {
+      <ion-progress-bar class="page-sync-progress" type="indeterminate"></ion-progress-bar>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="profile-content">
+  <div class="profile-shell">
+    <div class="header-large fade-in">
+      <h1>{{ "MY_PROFILE" | translate }}</h1>
+      <p>{{ "PROFILE_DESCRIPTION" | translate }}</p>
+    </div>
+
+    @if (!loading() && employee()) {
+      <ion-card class="profile-card slide-up-1">
+        <ion-card-content>
+          <div class="hero">
+            <ion-avatar class="avatar">
+              <img [src]="profileImage()" [alt]="employee()?.display_name">
+            </ion-avatar>
+
+            <div class="hero-copy">
+              <p class="eyebrow">{{ storage.selected_company?.name || ('SELECTED_COMPANY' | translate) }}</p>
+              <h1>{{ employee()?.display_name }}</h1>
+              <p class="job">{{ employee()?.job_id || ('EMPLOYEE' | translate) }}</p>
+            </div>
+          </div>
+
+          <div class="chips">
+            <ion-chip [color]="employee()?.active ? 'success' : 'medium'">
+              <ion-label>{{ employee()?.active ? ('ACTIVE' | translate) : ('NOT_ACTIVE' | translate) }}</ion-label>
+            </ion-chip>
+            <ion-chip [color]="employee()?.is_enrolled === 1 ? 'success' : 'warning'">
+              <ion-label>{{ employee()?.is_enrolled === 1 ? ('FACE_ENROLLED' | translate) : ('SELF_ENROLLMENT_NEEDED' | translate) }}</ion-label>
+            </ion-chip>
+          </div>
+
+          <div class="details">
+            <div class="detail-row">
+              <span>{{ "ATTENDANCE_MODE" | translate }}</span>
+              <strong>{{ "SELF_FACE_ATTENDANCE" | translate }}</strong>
+            </div>
+            <div class="detail-row">
+              <span>{{ "TRACKING" | translate }}</span>
+              <strong>{{ isTrackingEnabled() ? ('ENABLED' | translate) : ('DISABLED' | translate) }}</strong>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <div class="section-group slide-up-2">
+        <h3>{{ "ENROLLMENT" | translate }}</h3>
+        <ion-card class="action-card">
+        <ion-card-content>
+          <h2>{{ "SELF_ENROLLMENT" | translate }}</h2>
+          <p>
+            {{ "SELF_ENROLLMENT_DESCRIPTION" | translate }}
+          </p>
+          <ion-button expand="block" class="primary-action" (click)="startSelfEnrollment()">
+            <ion-icon slot="start" name="person-add-outline"></ion-icon>
+            {{ employee()?.is_enrolled === 1 ? ('UPDATE_MY_FACE' | translate) : ('START_SELF_ENROLLMENT' | translate) }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+      </div>
+
+      <div class="section-group slide-up-3">
+        <h3>{{ "QUICK_ACTIONS" | translate }}</h3>
+        <ion-card class="action-card">
+        <ion-card-content>
+          <ion-button expand="block" fill="outline" class="quick-action" (click)="goTo('/home')">
+            <ion-icon slot="start" name="camera-outline"></ion-icon>
+            {{ "OPEN_ATTENDANCE_CAMERA" | translate }}
+          </ion-button>
+          <ion-button expand="block" fill="clear" class="history-action" (click)="goTo('/attendances')">
+            <ion-icon slot="start" name="list-outline"></ion-icon>
+            {{ "VIEW_MY_ATTENDANCE_RECORDS" | translate }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+      </div>
+    }
+
+    @if (!loading() && !employee()) {
+      <ion-card class="empty-card slide-up-1">
+        <ion-card-content>
+          <h2>{{ "NO_EMPLOYEE_PROFILE_FOUND" | translate }}</h2>
+          <p>
+            {{ "EMPLOYEE_PROFILE_NOT_SYNCED" | translate }}
+          </p>
+          <ion-button expand="block" (click)="refreshProfile()">
+            {{ "TRY_SYNCING_AGAIN" | translate }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    }
+  </div>
+</ion-content>
+
+<ion-footer class="footer-modal">
+  <ion-toolbar class="footer-toolbar">
+    <div class="modal-options-container">
+      <div class="modal-option footer-icon" (click)="goTo('/profile')">
+        <div class="option-icon-wrapper staff" >
+          <ion-icon name="person-circle"></ion-icon>
+        </div>
+        <span class="footer-label">{{ "PROFILE" | translate }}</span>
+      </div>
+
+      <div class="modal-option primary-action" (click)="goTo('/home')">
+        <div class="option-icon-wrapper camera">
+          <ion-icon name="camera-outline"></ion-icon>
+        </div>
+      </div>
+
+      <div class="modal-option footer-icon" (click)="goTo('/attendances')">
+        <div class="option-icon-wrapper logs" [style.color]="router.url === '/attendances' ? '#2565f0' : ''">
+          <ion-icon name="list"></ion-icon>
+        </div>
+        <span class="footer-label">{{ "LOGS" | translate }}</span>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,254 @@
+// Variables
+$primary-green: #4f804e;
+$text-dark: #222;
+$text-light: #555;
+$bg-color: #f8f8f8;
+$pin-box-border: #ccc; // Light gray border for empty box
+$pin-box-filled: #ddd; // Very light gray background when filled
+$success-text: #4c9c54;
+
+ion-header {
+  background   : #388E3C;
+}
+
+// --- HEADER STYLES ---
+.header-green {
+  // Ensure the top green bar is visible
+  --background: white;
+  ion-toolbar {
+    --background: $primary-green;
+  }
+}
+
+.pin-back-button {
+  --color: white;
+}
+
+.pin-back-icon {
+  color: white;
+}
+
+.pin-header-title {
+  color: white;
+}
+
+// --- CONTENT STYLES ---
+ion-content.custom-background {
+  --background: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.content-wrapper {
+  width: 100%;
+  padding-top: 20px;
+  background: white;
+  // Removed box shadow to match the flat style of the new image
+  border-radius: 12px 12px 0 0; // Rounded top, flat bottom
+  overflow: hidden;
+  padding: 30px 20px;
+  min-height: 100%; // Ensures the white area fills the screen below the header
+}
+
+.main-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: $text-dark;
+  margin-top: 0;
+  margin-bottom: 8px; // Reduced margin for tighter look
+}
+
+.subtitle {
+  font-size: 15px;
+  color: $text-light;
+  margin-bottom: 30px;
+}
+
+.input-group {
+  margin-bottom: 30px;
+}
+
+.input-label {
+  font-weight: 600;
+  color: $text-light;
+  margin-bottom: 15px;
+  display: block;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+// --- PIN INPUT STYLES ---
+.pin-input-container {
+  position: relative;
+  .hidden-input {
+    // Keeps the input logic functional while being visually hidden
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    z-index: -1;
+  }
+}
+
+.pin-visual-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px; // Tighter gap between boxes
+  cursor: pointer;
+}
+
+.pin-box {
+  width: 45px;
+  height: 50px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.pin-box.active {
+  border-color: #3b82f6; /* highlight */
+}
+
+/* Fake blinking cursor that appears ONLY in active box */
+.pin-box.active::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 22px;
+  background: #3b82f6;
+  animation: blinkCursor 0.8s infinite;
+}
+
+@keyframes blinkCursor {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Keep hidden input invisible but still focusable */
+.hidden-input {
+  position: absolute;
+  opacity: 0;   /* invisible */
+  pointer-events: none;
+}
+
+// .pin-box {
+//   position: relative; // Mukkiam: Pseudo-element cursor-kaaga
+//   width:2rem;
+//   &.active::after {
+//     content: "";
+//     position: absolute;
+//     width: 2px;
+//     height: 1.5rem; // Unga box height-ku yetha maadhiri
+//     background-color: var(--ion-color-primary, #4caf50); 
+//     animation: blink 1s step-end infinite;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//   }
+// }
+
+// @keyframes blink {
+//   0%, 100% { opacity: 1; }
+//   50% { opacity: 0; }
+// }
+
+
+// .pin-box {
+//   flex: 1;
+//   height: 50px;
+//   width: 50px;
+//   background: white;
+//   border: 1.5px solid $pin-box-border; // Thinner border
+//   border-radius: 4px; // Square look
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   font-size: 35px;
+//   color: $text-dark;
+//   transition: all 0.2s ease-out; // Smoother transition
+
+//   &.filled {
+//     border-color: $primary-green; // Highlight border when filled
+//     background: $pin-box-filled;
+//   }
+
+//   // Animation for the active/next box to fill
+//   &.active {
+//     border-color: $primary-green;
+//     box-shadow: 0 0 0 1px rgba($primary-green, 0.4);
+//     animation: pulse 1s infinite alternate; // Subtle pulse animation
+//   }
+
+//   .dot {
+//     line-height: 1;
+//     font-weight: 900;
+//     opacity: 0;
+//     transform: scale(0.5);
+//     animation: fadeInDot 0.3s forwards; // Dot entry animation
+//   }
+// }
+
+// Keyframe animation for active box pulse
+@keyframes pulse {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Keyframe animation for the dot appearing
+@keyframes fadeInDot {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+// Confirmation Message
+.pin-match-message,.pin-match-message-error {
+  color: $success-text;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left; // Adjusted to left-align as implied by the image's "Your mPIN codes..." text placement
+  margin-top: 10px;
+  margin-left: 5px;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.4s ease, height 0.4s ease;
+
+  &.show {
+    height: auto;
+    opacity: 1;
+  }
+}
+.pin-match-message-error{
+  color: rgb(202, 67, 67);
+}
+
+// Button Styling (Retained from the previous response)
+.continue-button {
+  --background: #4f804e;
+  --background-activated: darken(#4f804e, 10%);
+  --border-radius: 10px;
+  height: 50px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: 40px;
+  transition: all 0.3s ease;
+
+  // Disabled state styling
+  &[disabled] {
+    --background: #a9c6a8;
+    --color: #f1f1f1;
+    cursor: default;
+  }
+}

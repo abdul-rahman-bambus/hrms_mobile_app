@@ -9,14 +9,26 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
-    implementation project(':capacitor-community-camera-preview')
+    implementation project(':anuradev-capacitor-background-mode')
+    implementation project(':capacitor-community-sqlite')
+    implementation project(':capacitor-mlkit-barcode-scanning')
     implementation project(':capacitor-app')
-    implementation project(':capacitor-camera')
+    implementation project(':capacitor-device')
     implementation project(':capacitor-filesystem')
+    implementation project(':capacitor-geolocation')
     implementation project(':capacitor-haptics')
     implementation project(':capacitor-keyboard')
+    implementation project(':capacitor-network')
     implementation project(':capacitor-preferences')
     implementation project(':capacitor-status-bar')
+    implementation project(':capgo-camera-preview')
+    implementation project(':capgo-capacitor-keep-awake')
+    implementation project(':capgo-capacitor-native-audio')
+    implementation project(':capgo-capacitor-nativegeocoder')
+    implementation project(':capgo-capacitor-speech-synthesis')
+    implementation project(':capacitor-face-recognition-tflite')
+    implementation project(':capacitor-native-settings')
+    implementation project(':capacitor-razorpay')
 
 }
 

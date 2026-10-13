@@ -1,0 +1,271 @@
+:host {
+  --font-family: 'Segoe UI', sans-serif;
+}
+
+ion-content {
+  --background: #f8fafc;
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+/* Header */
+ion-header ion-toolbar {
+  --background: #388E3C;
+  --color: #ffffff;
+  --border-color: transparent;
+}
+
+ion-header ion-toolbar ion-title {
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  --color: #ffffff;
+}
+
+.back-btn {
+  --color: #ffffff;
+}
+
+/* Introduction */
+.header-large {
+  padding: 24px 8px 16px;
+}
+
+.header-large h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+}
+
+.header-large p {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Sections */
+.section-group {
+  margin-top: 24px;
+}
+
+.section-group h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0 0 12px 12px;
+}
+
+/* Cards */
+.card-stack {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+.card-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  min-height: 72px;
+  transition: background-color 0.2s;
+}
+
+.card-item:last-child {
+  border-bottom: none;
+}
+
+.card-item:active {
+  background-color: #f8fafc;
+}
+
+.clickable-item {
+  cursor: pointer;
+}
+
+.nav-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  margin-left: 12px;
+}
+
+.nav-indicator ion-icon {
+  font-size: 18px;
+}
+
+/* Icons */
+.icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  color: #475569;
+}
+
+.icon-box ion-icon {
+  font-size: 20px;
+}
+
+/* Content */
+.content-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content-box.no-icon {
+  margin-left: 0;
+}
+
+.label {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.value {
+  font-size: 16px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.subtle-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+}
+
+/* Custom Input */
+.custom-input {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  --placeholder-color: #94a3b8;
+  --background: transparent;
+  min-height: auto;
+  height: 24px;
+}
+
+.delay-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.delay-control.invalid {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.06);
+}
+
+.delay-control.invalid .custom-input,
+.delay-control.invalid .delay-unit-select {
+  color: #b91c1c;
+}
+
+.delay-number {
+  flex: 1;
+}
+
+.delay-unit-select {
+  min-width: 72px;
+  max-width: 72px;
+  --padding-start: 0;
+  --padding-end: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Toggle */
+ion-toggle {
+  --track-background: #e2e8f0;
+  --track-background-checked: #388E3C;
+  --handle-background: #ffffff;
+  padding: 0;
+}
+
+/* Actions */
+.action-section {
+  margin-top: 40px;
+  padding: 0 8px 24px;
+}
+
+.primary-action {
+  --background: #0f172a;
+  --border-radius: 12px;
+  --color: #ffffff;
+  --box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.1);
+  font-weight: 600;
+  font-size: 16px;
+  height: 52px;
+  margin-bottom: 16px;
+}
+
+.secondary-action {
+  --color: #ef4444;
+  font-weight: 600;
+  font-size: 16px;
+  --ripple-color: #ef4444;
+}
+
+/* Animation utilities */
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.slide-up-1 {
+  opacity: 0;
+  animation: slideUp 0.6s ease-out 0.1s forwards;
+}
+
+.slide-up-2 {
+  opacity: 0;
+  animation: slideUp 0.6s ease-out 0.2s forwards;
+}
+
+.slide-up-3 {
+  opacity: 0;
+  animation: slideUp 0.6s ease-out 0.3s forwards;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,20 +1,19 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { inject, signal, Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from "@ionic/angular";
-import { CameraPreview, CameraPreviewOptions } from '@capacitor-community/camera-preview';
-import * as faceapi from '@vladmandic/face-api';
-import { OdooJsonRpcService } from "../services/odoojsonrpc.service"; // Assuming your Odoo service is here
-import { FaceDataStructure, StorageService } from '../services/storage.service';
-import {addIcons} from "ionicons"
-import {cloudUploadOutline,personOutline,bagOutline, checkmarkCircleSharp, closeCircleSharp,cameraOutline} from "ionicons/icons";
-import {ToastController} from "@ionic/angular";
+import { CameraPreview as CapgoCameraPreview, CameraPreviewOptions as CapgoCameraPreviewOptions } from '@capgo/camera-preview';
+import { FaceRecognition } from 'capacitor-face-recognition-tflite';
+import { IonHeader, IonToolbar, IonTitle, IonIcon, IonFooter, IonContent, IonButton, IonButtons, IonItem, IonList, IonLabel, IonProgressBar, IonBackButton, IonCard, IonFabButton, IonFab, ToastController, NavController } from '@ionic/angular/standalone';
+import { OdooJsonRpcService } from "../services/odoojsonrpc.service";
+import { AttendanceService, EmployeeService, FaceDataStructure, StorageService } from '../services/storage.service';
+import { GetResult, Preferences } from '@capacitor/preferences';
+import { TranslateModule } from '@ngx-translate/core';
 
-// Define the structure for the data sent to Odoo
 interface EmployeePayload {
   display_name: string;
-  image_128: string; // Base64 string
-  job_id: number | null; // Odoo FK needs an ID
+  image_1024: string;
+  job_id: number | null;
   active: boolean;
 }
 
@@ -23,260 +22,264 @@ interface EmployeePayload {
   templateUrl: './enroll.page.html',
   styleUrls: ['./enroll.page.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, IonicModule]
+  imports: [FormsModule, IonHeader, IonToolbar, IonTitle, IonIcon, IonContent, IonButton, IonButtons, IonItem, IonLabel, IonProgressBar, IonBackButton, IonFabButton, IonFab, TranslateModule]
 })
 export class EnrollPage implements OnInit, OnDestroy {
-  constructor(private odoo: OdooJsonRpcService,private storage:StorageService,private toast:ToastController) {
-    addIcons({cloudUploadOutline,personOutline,bagOutline,checkmarkCircleSharp,closeCircleSharp,cameraOutline})
-   }
-  @ViewChild('cameraPreview', { static: true }) cameraRef!: ElementRef;
+  appStateSub?: any;
+  private _injectedAttService = inject(AttendanceService);
+  private _injectedStorage = inject(StorageService);
+
+  constructor(
+    private odoo: OdooJsonRpcService,
+    private storage: StorageService,
+    private toast: ToastController,
+    private empservice: EmployeeService,
+    private navCtrl: NavController
+  ) { }
+
+  @ViewChild('cameraPreview', { static: true }) cameraRef!: ElementRef<HTMLDivElement>;
   @ViewChild('overlayCanvas', { static: true }) overlayRef!: ElementRef<HTMLCanvasElement>;
-networkProgress=false;
-  // Form Data Model
-  formData: EmployeePayload = {
+  networkProgress = signal<boolean>(false);
+
+  formData = signal<EmployeePayload>({
     display_name: '',
-    image_128: '',
-    job_id: null, // Example: You need to fetch job IDs from Odoo
+    image_1024: '',
+    job_id: null,
     active: true,
-  };
-  
-  // UI and State
-  capturedImageBase64: string = '';
-  debugMessage: string = 'Initializing...';
-  isCameraStarted = false;
-  isFaceDetected = false;
-  
-  private detectionTimer: any;
-  private detectionOptions = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 });
+  });
 
-  
-  async ionViewDidEnter(){
-    this.formData=this.storage.selectedEmployee
-    console.log(this.formData,"form daaat")
-     await this.startCamera();
-    this.setupCanvas();
-    // this.startDetectionLoop();
-  }
-  async ngOnInit() {
-    // await this.odoo.login(); // Ensure login is complete
-    // await this.loadModels();
-   
-  }
+  capturedImageBase64 = signal<string>('');
+  debugMessage = signal<string>('Initializing...');
+  isCameraStarted = signal<boolean>(false);
+  isFaceDetected = signal<boolean>(false);
+  isScanning = signal<boolean>(false);
+  capturedEnrollmentSamples = signal<string[]>([]);
+  readonly maxEnrollmentSamples = 1;
 
-  // --- Setup & Lifecycle ---
+  private detectionTimer!: NodeJS.Timeout;
+  private isComponentActive = false;
+  private isProcessing = false;
 
-  async loadModels() {
-    try {
-      this.debugMessage = 'Loading face models...';
-      await faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models');
-      await faceapi.nets.faceLandmark68TinyNet.loadFromUri('/assets/models');
-      await faceapi.nets.faceRecognitionNet.loadFromUri('/assets/models');
-      this.debugMessage = 'Models loaded. Camera started.';
-    } catch (error) {
-      this.debugMessage = 'Error loading models.';
-      console.error('Error loading models:', error);
+  async ionViewWillEnter() {
+    if (this.appStateSub) {
+      this.appStateSub.remove();
     }
+    this.appStateSub = await App.addListener('appStateChange', async ({ isActive }) => {
+      if (!isActive && this._injectedStorage.isNetworkAvailable) {
+        console.log('App backgrounded, syncing data...');
+        await this._injectedAttService.syncToOdoo();
+      }
+    });
+
+    if (this.storage.selectedEmployee) {
+      this.formData.set(this.storage.selectedEmployee);
+    }
+    this.capturedImageBase64.set('');
+    this.capturedEnrollmentSamples.set([]);
+    await this.startCamera();
+    this.setupCanvas();
   }
 
-  async startCamera() {
+  async ngOnInit(): Promise<void> { }
+
+  async loadModels(): Promise<void> {
+    this.debugMessage.set('TFLite Face Recognition model ready.');
+  }
+
+  async startCamera(): Promise<void> {
     try {
-      const parentElementId = this.cameraRef.nativeElement.id || 'cameraPreview';
+      const parentElementId: string = this.cameraRef.nativeElement.id || 'cameraPreview';
       this.cameraRef.nativeElement.id = parentElementId;
-      
-      const cameraOptions: CameraPreviewOptions = {
+
+      const cameraOptions: CapgoCameraPreviewOptions = {
         position: 'front',
-        parent: parentElementId,
-        width: window.innerWidth,
-        height: window.innerHeight-300,
+        width: window.screen.width,
+        height: window.screen.height,
         toBack: true,
+        disableAudio: true,
+        storeToFile: false,
+        x: 0,
+        y: 0,
+        aspectMode: 'cover'
       };
-      
-      await CameraPreview.start(cameraOptions);
-      this.isCameraStarted = true;
+
+      if ((await CapgoCameraPreview.isRunning()).isRunning) {
+        await CapgoCameraPreview.stop({ force: true });
+      }
+
+      await CapgoCameraPreview.start(cameraOptions);
+      this.isCameraStarted.set(true);
     } catch (error) {
-      this.debugMessage = 'Camera error - check permissions.';
+      this.debugMessage.set('Camera error - check permissions.');
       console.error('Error starting camera:', error);
     }
   }
 
-  setupCanvas() {
+  setupCanvas(): void {
     setTimeout(() => {
-      const canvas = this.overlayRef.nativeElement;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const canvas: HTMLCanvasElement = this.overlayRef.nativeElement;
+      canvas.width = window.screen.width;
+      canvas.height = window.screen.height;
       canvas.style.width = canvas.width + 'px';
       canvas.style.height = canvas.height + 'px';
     }, 500);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     clearInterval(this.detectionTimer);
-    if (this.isCameraStarted) {
-      CameraPreview.stop();
+    if (this.isCameraStarted()) {
+      CapgoCameraPreview.stop({ force: true });
     }
   }
 
-  // --- Face Detection & Auto Capture Logic ---
-
-  startDetectionLoop() {
-    // Check every 500ms
-    this.detectionTimer = setInterval(() => this.runDetection(), 500); 
-  }
-
-  async runDetection() {
-    // Prevent execution if camera isn't ready or face is already captured
-    if (!this.isCameraStarted || this.isFaceDetected) return; 
+  async startDetectionLoop(): Promise<void> {
+    if (this.isProcessing) return;
+    this.isProcessing = true;
+    this.isScanning.set(true);
+    this.networkProgress.set(true);
 
     try {
-      // 1. Capture frame at low quality for speed
-      const photo = await CameraPreview.capture({ quality: 80 }); 
-      if (!photo.value) return;
+      this.capturedImageBase64.set('');
 
-      const img = new Image();
-      const correctedBase64 = await this.storage.rotateBase64Image(img,photo.value,90);
-      img.src = `data:image/jpeg;base64,${correctedBase64}`;
-      
-      // Wait for image load. Add reject handler for robustness.
-      await new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject; // Rejects the promise if image data is invalid
-      });
-      // 2. Perform Detection
-      // The result 'detection' is a FaceDetection object (or null)
-      let detection = await faceapi.detectSingleFace(img, this.detectionOptions);
-      // NOTE: Do NOT chain .withFaceLandmarks() or .withFaceDescriptor() here
-      // as they are not needed for simple bounding box detection and slow things down.
-      // const displaySize = { width: 320, height: 240 }
-      // detection= faceapi.resizeResults(detection, displaySize)
-      // 3. Draw Detection Box
-      // FIX: The detection object itself is passed (it contains the box property).
-      this.drawDetectionBox(detection, img.width, img.height); 
-      if (detection) {
-        // FIX: Access score directly from the FaceDetection object.
-        this.debugMessage = `Face detected! Confidence: ${(detection.score * 100).toFixed(1)}%`;
-        console.log(this.debugMessage,"messsss")
-        // 4. AUTO CAPTURE AND STOP LOOP
-        if (!this.isFaceDetected && detection.score > 0.8) {
-             this.isFaceDetected = true; 
-             clearInterval(this.detectionTimer); // Stop loop
-             await this.captureAndSetPhoto(correctedBase64);
+      if (!this.isCameraStarted()) {
+        await this.startCamera();
+        await new Promise((resolve) => setTimeout(resolve, 400));
+      }
+
+      const photo = await CapgoCameraPreview.capture({ quality: 50 });
+      if (!photo?.value) {
+        console.warn('No photo captured from camera');
+        return;
+      }
+
+      const rawBase64 = photo.value.replace(/^data:image\/[a-z]+;base64,/, '').replace(/[\r\n]/g, '');
+      const dataUri = `data:image/jpeg;base64,${rawBase64}`;
+      const resizedBase64 = await this.storage.resizeBase64Image(dataUri);
+      const cleanBase64 = resizedBase64.replace(/^data:image\/[a-z]+;base64,/, '').replace(/[\r\n]/g, '');
+
+      const finalBase64 = await this.storage.straightenBase64Image(cleanBase64);
+
+      try {
+        const detectionResult = await FaceRecognition.detectFaces({ imageBase64: finalBase64 });
+        if (detectionResult?.faces && detectionResult.faces.length > 0) {
+          this.isFaceDetected.set(true);
         }
-      } else {
-        this.debugMessage = 'No face detected.';
+      } catch (err) {
+        console.warn('Face detection check skipped/failed:', err);
       }
 
+      this.capturedImageBase64.set(finalBase64);
+      this.formData.set({
+        ...this.formData(),
+        image_1024: finalBase64
+      });
+      this.capturedEnrollmentSamples.set([finalBase64]);
+
+      const toast = await this.toast.create({
+        message: 'Photo captured successfully!',
+        duration: 2000,
+        color: 'success',
+        position: 'top'
+      });
+      await toast.present();
     } catch (error) {
-      // Log critical errors like image decoding failure
-      console.error('Detection loop error (Image load or processing failed):', error);
-      this.debugMessage = `Error processing frame.`;
-    }
-}
-
-
-  
-  async captureAndSetPhoto(base64Image: string) {
-      // The Base64 string is ready for Odoo
-      
-      this.capturedImageBase64 = `data:image/jpeg;base64,${base64Image}`;
-      this.formData.image_128=base64Image;
-      
-      // Stop the camera preview after successful capture
-      if (this.isCameraStarted) {
-          await CameraPreview.stop();
-          this.isCameraStarted = false;
+      console.error('Error during photo capture:', error);
+      const toast = await this.toast.create({
+        message: 'Failed to capture photo. Please try again.',
+        duration: 2000,
+        color: 'danger',
+        position: 'top'
+      });
+      await toast.present();
+    } finally {
+      try {
+        if (this.isCameraStarted()) {
+          await CapgoCameraPreview.stop({ force: true });
+        }
+      } catch (e) {
+        console.warn('Error stopping camera preview:', e);
       }
-      this.debugMessage = 'Photo automatically captured! Ready to submit.';
+      this.isCameraStarted.set(false);
+      this.isScanning.set(false);
+      this.isProcessing = false;
+      this.networkProgress.set(false);
+    }
   }
 
-  // --- UI and API Logic ---
-
-  async submitEnrollment() {
-    if (!this.formData.display_name || !this.formData.image_128 || this.formData.job_id === null) {
-      alert('Please fill all required fields and ensure a photo is captured.');
-      return;
-    }
-    
-    // Convert base64 to Odoo's expected format (remove MIME prefix if present, which your logic already does)
-   
-    
+  async submitEnrollment(): Promise<void> {
+    const currentData = this.formData();
+    if (!currentData.display_name || !currentData.image_1024) return;
+    this.networkProgress.set(true);
     try {
-      this.debugMessage = 'Submitting data to Odoo...';
-      this.networkProgress=true;
-      let updated:boolean=await this.odoo.updateEmployee(this.storage.selectedEmployee.id,this.formData.image_128)
-      this.networkProgress=false;
-      if(updated){
-let updatedToast=await this.toast.create({
-  color:"success",
-  position:"top",
-  message:`${this.formData.display_name}'s enrolled successfully`,
-  "duration":2000
-})
-updatedToast.present();
-console.log(this.storage.selectedEmployee,"sell")
-let descriptors = await this.storage.generateLabeledDescriptors([this.storage.selectedEmployee]);
-const data = localStorage.getItem('enrollments');
-// if (!data) {
-//   this.debugMessage = 'No enrollments found. Go to Enroll page first.';
-//   return;
-// }
+      const selectedEmp = this.storage.selectedEmployee || currentData;
+      const odooId = selectedEmp.odoo_id || selectedEmp.id;
+      const today = new Date();
 
-let enrolledUsers:FaceDataStructure[] =data?JSON.parse(data):[];
-let enrolledUsersfilter=enrolledUsers.filter((user)=>user.employee_id===this.storage.selectedEmployee.id);
+      // 1. Update SQLite local employee record
+      await this.storage.updateEmployee(
+        selectedEmp,
+        {
+          image_1024: currentData.image_1024,
+          is_enrolled: 1,
+          employee_sync: 0,
+          last_photo_update_time: today.toISOString().replace('T', ' ').replace('Z', '').split('.')[0]
+        }
+      );
 
-if(enrolledUsersfilter.length>0){
-  enrolledUsers=enrolledUsers.map((user)=>{
-    if(user.employee_id===this.storage.selectedEmployee.id){
-      user.descriptor=descriptors[0].descriptor;
-      
-    }
-    return user
-  });
-}
-else if(enrolledUsersfilter.length===0){
-  enrolledUsers.push({...this.storage.selectedEmployee,'descriptor':descriptors[0].descriptor,"label":this.storage.selectedEmployee.id})
-}
-console.log(enrolledUsers,"enrolled")
-localStorage.setItem("enrollments",JSON.stringify(enrolledUsers))
+      // 2. Generate TFLite face descriptor sample
+      try {
+        const descriptorSource = {
+          ...selectedEmp,
+          id: odooId,
+          odoo_id: odooId,
+          company_id: Array.isArray(selectedEmp.company_id) ? selectedEmp.company_id : [this.storage.selected_company?.id],
+          image_1024: currentData.image_1024
+        };
+        const descriptors = await this.storage.generateLabeledDescriptors([descriptorSource], 'offline');
+        const descriptorSample = descriptors[0]?.descriptor;
+        if (descriptorSample?.length) {
+          await this.storage.updateEmployee(
+            selectedEmp,
+            { face_descriptor_sample: JSON.stringify(descriptorSample) }
+          );
+          if (odooId) {
+            await this.storage.upsertEnrollmentDescriptor(Number(odooId), descriptorSample);
+          }
+        }
+      } catch (descError) {
+        console.warn('Descriptor extraction warning during enrollment:', descError);
       }
-      
-      // // Assuming your Odoo service has a method to create a new hr.employee record
-      // const newEmployeeId = await this.odoo.createEmployee(payload); 
 
-      // this.debugMessage = `Enrollment successful! Employee ID: ${newEmployeeId}`;
-      // alert(`Employee ${this.formData.display_name} enrolled successfully!`);
-      
-    } catch (error) {
-      this.debugMessage = `Odoo submission failed: ${error}`;
-      console.error('Odoo API Error:', error);
-      alert('Submission failed. Check console.');
+      // 3. Sync photo update to Odoo server if online
+      if (this.storage.isNetworkAvailable && odooId) {
+        try {
+          await this.odoo.updateEmployee(odooId, currentData.image_1024);
+          await this.storage.updateEmployee(selectedEmp, { employee_sync: 1 });
+        } catch (odooErr) {
+          console.warn('Odoo photo sync queued for offline sync:', odooErr);
+        }
+      }
+
+      const toast = await this.toast.create({
+        message: 'Face photo updated and enrolled successfully!',
+        duration: 2000,
+        color: 'success',
+        position: 'top'
+      });
+      await toast.present();
+
+      this.navCtrl.back();
+    } catch (err) {
+      console.error('Enrollment error:', err);
+      const toast = await this.toast.create({
+        message: 'Failed to update employee photo.',
+        duration: 3000,
+        color: 'danger',
+        position: 'top'
+      });
+      await toast.present();
+    } finally {
+      this.networkProgress.set(false);
     }
-  }
-
-  drawDetectionBox(detection: faceapi.FaceDetection | undefined, imageWidth: number, imageHeight: number) {
-    
-    const canvas = this.overlayRef.nativeElement;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (!detection) return;
-
-    // ... (Drawing logic same as before, ensuring scaling) ...
-    const box = detection.box;
-    const scaleX = canvas.width / imageWidth;
-    const scaleY = canvas.height / imageHeight;
-    
-    const scaledX = box.x * scaleX;
-    const scaledY = box.y * scaleY;
-    const scaledWidth = box.width * scaleX;
-    const scaledHeight = box.height * scaleY;
-
-    ctx.strokeStyle = 'lime';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(scaledX, scaledY, scaledWidth, scaledHeight);
-    
-    ctx.fillStyle = 'lime';
-    ctx.font = '20px Arial';
-    ctx.fillText(`LOOK HERE`, scaledX, scaledY - 10);
   }
 }

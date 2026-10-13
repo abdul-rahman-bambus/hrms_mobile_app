@@ -1,4 +1,85 @@
- .spinner-center {
-    display: block;
-    margin: 40px auto;
-  }
+ion-app,
+ion-router-outlet {
+  height: 100%;
+  width: 100%;
+}
+
+ion-menu.app-global-menu {
+  --width: min(86vw, 320px);
+  --max-width: 320px;
+}
+
+.app-menu-header ion-toolbar {
+  --background: #388e3c;
+  --color: #ffffff;
+  box-shadow: 0 12px 30px rgba(31, 109, 36, 0.2);
+}
+
+.app-menu-content {
+  --background: linear-gradient(180deg, #eef8f0 0%, #f8fafc 45%, #eef4ff 100%);
+}
+
+.app-menu-hero {
+  padding: 1.1rem 1rem 0.75rem;
+}
+
+.app-menu-eyebrow {
+  color: #1f6d24;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-menu-hero p {
+  margin: 0.45rem 0 0;
+  color: #64748b;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.app-menu-list {
+  padding: 0.45rem 0.6rem 0.9rem;
+  background: transparent;
+}
+
+.app-menu-item {
+  --background: rgba(255, 255, 255, 0.94);
+  --color: #1f2937;
+  --padding-start: 1rem;
+  --inner-padding-end: 1rem;
+  --min-height: 48px;
+  margin-bottom: 0.55rem;
+  border-radius: 18px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.app-menu-item::part(native) {
+  border-radius: 18px;
+}
+
+.app-menu-item ion-icon {
+  color: #388e3c;
+  font-size: 1.2rem;
+}
+
+.app-menu-item.active {
+  --background: #e8f5e9;
+  --color: #1f6d24;
+}
+
+.app-menu-item.active ion-icon {
+  color: #1f6d24;
+}
+
+.app-menu-item.danger {
+  --background: rgba(255, 245, 245, 0.98);
+  --color: #c62828;
+  margin-top: 0.8rem;
+}
+
+.app-menu-item.danger ion-icon {
+  color: #c62828;
+}

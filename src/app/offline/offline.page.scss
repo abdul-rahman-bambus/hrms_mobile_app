@@ -1,0 +1,94 @@
+/* ion-content host */
+.offline-page {
+  --background: transparent; // let us control bg on wrapper if needed
+}
+
+/* TRUE centering wrapper */
+.offline-wrapper {
+  // min-height: 100vh;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(145deg, #e8ecff 0%, #f6faff 80%);
+  animation: bgFade 7s infinite alternate ease-in-out;
+}
+
+/* Glass card */
+.offline-card {
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
+  padding: 42px 28px;
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 14px 38px rgba(55, 65, 120, 0.2),
+    inset 0 0 25px rgba(255, 255, 255, 0.35);
+  animation: cardUp .7s cubic-bezier(.25,.8,.25,1);
+}
+
+/* Icon with RED cloud */
+.icon-wrap {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 100, 100, 0.15);
+  backdrop-filter: blur(12px);
+}
+
+.offline-icon {
+  font-size: 54px;
+  color: #d62828; /* controlled red */
+}
+
+/* Text */
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a2137;
+}
+.subtitle {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #566180;
+}
+.hint {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #8893ac;
+}
+
+/* Animations */
+@keyframes cardUp {
+  from { opacity: 0; transform: translateY(30px) scale(.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.smooth-fade-1 { opacity: 0; animation: fadeIn .9s ease forwards .2s; }
+.smooth-fade-2 { opacity: 0; animation: fadeIn .9s ease forwards .35s; }
+.smooth-fade-3 { opacity: 0; animation: fadeIn .9s ease forwards .5s; }
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(214, 40, 40, 0.35); }
+  50%      { box-shadow: 0 0 22px rgba(214, 40, 40, 0.55); }
+}
+.pulse-glow {
+  animation: pulseGlow 2.6s infinite ease-in-out;
+}
+
+@keyframes bgFade {
+  0%   { background: #e8ecff; }
+  100% { background: #f4f6ff; }
+}

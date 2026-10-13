@@ -1,0 +1,661 @@
+/* =============== BASE PAGE =============== */
+.page-container {
+  --background  : transparent !important;
+  background: transparent !important;
+  // background    : transparent !important;
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+  height        : 100%;
+  overflow-y    : hidden;
+}
+
+.center-wrapper {
+  width          : 100%;
+  height         : 100%;
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  flex-direction : column;
+  padding-top    : 0.6rem;
+}
+
+/* =============== HEADER =============== */
+.header-premium{
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  box-shadow: none !important;
+}
+.header-premium ion-toolbar {
+  --background: #388E3C;
+  --border-width: 0 !important;
+  border: none !important;
+  color       : #fff;
+  // box-shadow  : 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.toolbar-premium {
+  display        : flex;
+  align-items    : center;
+  justify-content: space-between;
+}
+
+.title-main {
+  font-weight   : 700;
+  font-size     : 1.15rem;
+  color         : #fff;
+  letter-spacing: 0.3px;
+}
+
+.nav-buttons {
+  display      : flex;
+  align-items  : center;
+  gap          : 0.4rem;
+  border-radius: 50%;
+}
+
+.nav-pill {
+  --background : #f3f4f6;
+  --color      : #333;
+  border-radius: 10px;
+  height       : 32px;
+  width        : 32px;
+  transition   : all 0.3s ease;
+}
+
+.nav-pill:hover {
+  --background: #007aff;
+  --color     : #fff;
+  transform   : translateY(-2px) scale(1.05);
+}
+
+/* =============== CAMERA SECTION =============== */
+.camera-section {
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+  gap           : 1.4rem;
+  width         : 100%;
+}
+
+.camera-frame {
+  width        : min(88vw, 380px);
+  aspect-ratio : 3/4;
+  border-radius: 22px;
+  position     : relative;
+  overflow     : hidden;
+  // background: rgba(0, 0, 0, 0.15);
+  // border: 1px solid rgba(255, 255, 255, 0.08);
+  // box-shadow: 0 0 35px rgba(0, 132, 255, 0.25);
+  animation    : fadeIn 0.8s ease;
+}
+
+.camera-preview {
+  width        : 100%;
+  height       : 100vh;
+  position     : absolute;
+  top          : 0;
+  left         : 0;
+  border-radius: inherit;
+  background   : transparent !important;
+  // z-index      : 1;
+}
+
+.overlay-canvas {
+  position  : absolute;
+  inset     : 0;
+  // z-index   : 2;
+  background: transparent !important;
+}
+
+
+/* =============== DETECTION MESSAGE =============== */
+.detect-message {
+  width          : 100%;
+  text-align     : center;
+  display        : flex;
+  justify-content: center;
+  animation      : fadeInUp 0.6s ease forwards;
+  margin-top     : 0.6rem;
+  z-index        : 5;
+
+}
+
+.footer-status {
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  flex-direction : column;
+  backdrop-filter: blur(10px);
+}
+
+.status {
+  display        : flex;
+  flex-direction : column;
+  align-items    : center;
+  gap            : 8px;
+  border-radius  : 18px;
+  padding        : 1rem 1.4rem;
+  background     : rgba(0, 0, 0, 0.25);
+  border         : 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  box-shadow     :
+    0 0 25px rgba(0, 132, 255, 0.25),
+    inset 0 0 10px rgba(255, 255, 255, 0.05);
+  transform : scale(1);
+  transition: all 0.35s ease;
+  animation : popUp 0.5s ease forwards;
+}
+
+/* Icon glow + animation */
+.status ion-icon {
+  font-size: 64px;
+  filter   : drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+  animation: iconPulse 2.5s infinite ease-in-out;
+}
+
+.status.success ion-icon {
+  color      : #29e070;
+  text-shadow: 0 0 20px rgba(41, 224, 112, 0.8);
+}
+
+.status.warning ion-icon {
+  color      : #ffcc00;
+  text-shadow: 0 0 20px rgba(255, 204, 0, 0.8);
+}
+
+.status.danger ion-icon {
+  color      : #ff4b5c;
+  text-shadow: 0 0 20px rgba(255, 75, 92, 0.8);
+}
+
+/* Text styling */
+.status h3 {
+  margin        : 0;
+  font-size     : 1.05rem;
+  font-weight   : 600;
+  letter-spacing: 0.5px;
+  color         : #ffffff;
+  text-transform: uppercase;
+  text-shadow   : 0 0 12px rgba(255, 255, 255, 0.25);
+}
+
+.status p {
+  margin   : 0;
+  font-size: 0.9rem;
+  color    : #d6d6d6;
+  opacity  : 0.9;
+}
+
+/* Hover pulse */
+.status:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 35px rgba(0, 132, 255, 0.35),
+    inset 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* =============== LOADING =============== */
+.loading-container {
+  position       : absolute;
+  inset          : 0;
+  background     : rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  display        : flex;
+  flex-direction : column;
+  justify-content: center;
+  align-items    : center;
+  z-index        : 10;
+  animation      : fadeIn 0.4s ease;
+}
+
+.loading-container ion-spinner {
+  --color  : #007aff;
+  transform: scale(1.3);
+}
+
+.loading-container p {
+  color     : #fff;
+  font-size : 0.9rem;
+  margin-top: 10px;
+}
+
+/* =============== ANIMATIONS =============== */
+
+
+@keyframes fadeInUp {
+  0% {
+    opacity  : 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity  : 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes iconPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity  : 1;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity  : 0.9;
+  }
+}
+
+@keyframes popUp {
+  0% {
+    transform: scale(0.9);
+    opacity  : 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity  : 1;
+  }
+}
+
+
+/* =============== FACE FRAME =============== */
+.face-frame {
+  position : absolute;
+  top      : 50%;
+  left     : 50%;
+  width    : 260px;
+  /* width of the face area */
+  height   : 360px;
+  /* height of the face area */
+  transform: translate(-50%, -50%);
+  z-index  : 4;
+}
+
+.corner {
+  position     : absolute;
+  width        : 40px;
+  height       : 40px;
+  border       : 4px solid #ff7b00;
+  /* orange color */
+  opacity      : 0.9;
+  border-radius: 4px;
+}
+
+/* Top Left Corner */
+.corner.tl {
+  top          : 0;
+  left         : 0;
+  border-right : none;
+  border-bottom: none;
+}
+
+/* Top Right Corner */
+.corner.tr {
+  top          : 0;
+  right        : 0;
+  border-left  : none;
+  border-bottom: none;
+}
+
+/* Bottom Left Corner */
+.corner.bl {
+  bottom      : 0;
+  left        : 0;
+  border-top  : none;
+  border-right: none;
+}
+
+/* Bottom Right Corner */
+.corner.br {
+  bottom     : 0;
+  right      : 0;
+  border-top : none;
+  border-left: none;
+}
+
+/* Optional soft pulse effect for premium look */
+@keyframes framePulse {
+
+  0%,
+  100% {
+    opacity  : 0.9;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity  : 1;
+    transform: scale(1.02);
+  }
+}
+
+.face-frame .corner {
+  animation: framePulse 2.5s ease-in-out infinite;
+}
+
+
+.timer-popup {
+  background     : transparent !important;
+  --background   : transparent !important;
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  position       : relative;
+  top            : 40%;
+}
+
+/* Make modal overlay background transparent */
+ion-modal::part(backdrop) {
+  background: transparent !important;
+}
+
+/* Fix modal content wrapper */
+ion-modal::part(content) {
+  --background: transparent !important;
+  margin      : 0 !important;
+  padding     : 0 !important;
+
+  display        : flex !important;
+  justify-content: center !important;
+  align-items    : center !important;
+
+  width : 100vw !important;
+  height: 100vh !important;
+}
+
+
+/* FORCE ALL INTERNAL WRAPPERS TO CENTER */
+ion-modal,
+ion-modal .modal-wrapper,
+ion-modal .ion-overlay-wrapper,
+ion-modal .overlay-wrapper,
+ion-modal .modal-shadow,
+ion-modal .modal-inner,
+ion-modal .modal-container {
+  display        : flex !important;
+  justify-content: center !important;
+  align-items    : center !important;
+
+  width : 100% !important;
+  height: 100% !important;
+
+  margin : 0 !important;
+  padding: 0 !important;
+
+  background: transparent !important;
+}
+
+
+/* ---- YOUR TIMER BOX ---- */
+.premium-timer {
+  pointer-events: auto;
+  text-align    : center;
+  padding       : 26px 24px;
+
+  background     : rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px);
+  border-radius  : 22px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  animation : fadeInScale 0.4s ease;
+}
+
+
+/* ---- TIMER CIRCLE ---- */
+.timer-circle {
+  position: relative;
+  width   : 140px;
+  height  : 140px;
+
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+
+  margin: 0 auto 14px;
+}
+
+.progress-ring {
+  display: block;
+  margin : 0 auto;
+}
+
+.progress-ring__circle {
+  stroke-dasharray : 377;
+  stroke-dashoffset: calc(377 - (377 * var(--progress, 1)));
+  transform        : rotate(-90deg);
+  transform-origin : 50% 50%;
+  transition       : stroke-dashoffset 1s linear;
+}
+
+
+/* ---- COUNTDOWN NUMBER ---- */
+.timer-number {
+  position   : absolute;
+  font-size  : 42px;
+  font-weight: 700;
+}
+
+
+/* ---- TEXT ---- */
+.timer-text {
+  margin-top : 12px;
+  font-size  : 15px;
+  font-weight: 500;
+}
+
+/* ---- Animations ---- */
+@keyframes fadeInScale {
+  0% {
+    opacity  : 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity  : 1;
+    transform: scale(1);
+  }
+}
+
+
+
+/* Make modal background transparent */
+ion-modal.detectionStatus::part(backdrop) {
+  background: rgba(0, 0, 0, 0.45);
+  /* dim background */
+}
+
+
+ion-modal.detectionStatus::part(content) {
+  --background   : transparent;
+  height         : 100vh;
+  width          : 100vw;
+  display        : flex;
+  justify-content: flex-end;
+  align-items    : center;
+  padding        : 0;
+}
+
+/* MAIN FULLSCREEN CARD */
+.detect-fullscreen {
+  width         : 100vw;
+  height        : 100vh;
+  background    : #ffffff;
+  padding       : 0;
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+  overflow      : hidden;
+  animation     : slideUp 0.35s ease;
+  margin-top    : 50px;
+}
+
+/* GREEN HEADER */
+.top-section {
+  width     : 100%;
+  height    : 40%;
+  background: #7be495;
+
+  display        : flex;
+  justify-content: center;
+  align-items    : flex-end;
+  padding-bottom : 25px;
+}
+
+/* Avatar */
+.avatar-circle img {
+  width        : 120px;
+  height       : 120px;
+  border-radius: 50%;
+  background   : #ffffff;
+  box-shadow   : 0 3px 10px rgba(0, 0, 0, 0.15);
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+}
+
+/* Content */
+.content {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.name {
+  font-size  : 20px;
+  font-weight: 600;
+  margin     : 0;
+  color      : #222;
+}
+
+.tag {
+  margin-top: 6px;
+  font-size : 15px;
+  color     : #7c7c7c;
+}
+
+.tag span {
+  font-weight: 600;
+  color      : #000;
+}
+
+/* Animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity  : 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity  : 1;
+  }
+}
+
+/* MAIN CONTENT WRAPPER */
+.content {
+  width     : 100%;
+  text-align: center;
+  margin-top: 28px;
+
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+}
+
+/* INDIVIDUAL MODE BOX */
+.content-box {
+  animation     : fadeInUp 0.45s ease;
+  display       : flex;
+  flex-direction: column;
+  gap           : 6px;
+}
+
+/* ICON */
+.status-icon {
+  font-size    : 60px;
+  margin-bottom: 4px;
+  margin-left  : 37%;
+  animation    : iconPop 0.5s ease;
+}
+
+/* ICON COLORS */
+.in-mode .status-icon {
+  color : #14c56b;
+  filter: drop-shadow(0 0 6px rgba(20, 197, 107, 0.45));
+}
+
+.out-mode .status-icon {
+  color : #f59e0b;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.45));
+}
+
+/* TITLE */
+.content-box h3 {
+  margin        : 0;
+  font-size     : 22px;
+  font-weight   : 700;
+  color         : #111827;
+  letter-spacing: 0.3px;
+}
+
+/* NAME */
+.content-box .name {
+  margin     : 0;
+  font-size  : 18px;
+  font-weight: 600;
+  color      : #374151;
+}
+
+/* TIME TEXT */
+.content-box .time {
+  margin    : 0;
+  margin-top: 4px;
+  font-size : 15px;
+  color     : #4b5563;
+}
+
+.content-box .time span {
+  color      : #111;
+  font-weight: 700;
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity  : 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity  : 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iconPop {
+  0% {
+    transform: scale(0.6);
+    opacity  : 0;
+  }
+
+  60% {
+    transform: scale(1.15);
+    opacity  : 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

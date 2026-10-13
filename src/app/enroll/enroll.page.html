@@ -1,69 +1,75 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-        <ion-back-button defaultHref="/employee-list"></ion-back-button>
+<ion-header class="header-white">
+  <ion-toolbar class="toolbar-premium">
+    <ion-buttons slot="start" >
+      <ion-back-button class="toolbar-premium-btn" defaultHref="/profile" ></ion-back-button>
     </ion-buttons>
-    <ion-title>Auto Face Enrollment</ion-title>
+    <ion-title>
+      <div class="title-main">{{ "FACE_ENROLLMENT" |translate }}</div>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content  class="camera-content" color="light">
-  <ion-progress-bar *ngIf="networkProgress" type="indeterminate"></ion-progress-bar>
+<ion-content class="page-container">
 
+  <div class="center-wrapper">
+    @if (networkProgress()) {
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+    }
+    <div class="camera-wrapper">
+      <div #cameraPreview id="cameraPreview" class="camera-preview"></div>
+      <canvas #overlayCanvas class="overlay-canvas"></canvas>
 
-  <div #cameraPreview id="cameraPreview"  class="camera-placeholder"></div>
-    <canvas #overlayCanvas class="overlay-canvas"></canvas>
+      @if (isCameraStarted() && !isFaceDetected()) {
+        <div class="scan-overlay" >
+          <div class="scan-circle"></div>
+          <div class="scan-sweep"></div>
+        </div>
+      }
 
- 
-</ion-content>
- <ion-footer class="ion-no-border">
-   <div class="photo-area">
-   
+      @if (!isCameraStarted() && capturedImageBase64()) {
+        <div class="captured-preview">
+          <img [src]="'data:image/jpeg;base64,' + capturedImageBase64()" alt="Captured Photo" />
+          <p class="capture-success">✅ {{ "CAPTURED_SUCCESS" | translate  }}</p>
+          <p class="capture-success">
+            Samples: {{ capturedEnrollmentSamples().length }}/{{ maxEnrollmentSamples }}
+          </p>
+        </div>
+      }
 
-    <div *ngIf="!isCameraStarted && capturedImageBase64" class="captured-image-container">
-      <img [src]="capturedImageBase64" alt="Captured Employee Photo">
-      <ion-label color="success" class="photo-status-label">Photo Captured Successfully! ✅</ion-label>
-    </div>
-    
-    <ion-label *ngIf="isCameraStarted && !isFaceDetected" class="photo-status-label loading-cue">
-        Centering Face for Capture...
-    </ion-label>
-    
   </div>
 
-  <div class="form-container">
-    <ion-button color="medium" style="width: 90vw;margin-left: 5vw;" (click)="startDetectionLoop()"><ion-icon name='camera-outline'></ion-icon></ion-button>
-    <ion-list class="enrollment-list ion-padding-vertical">
-      <ion-item lines="full">
-        <ion-icon name="person-outline"/>
-         <span>{{formData.display_name}}</span>
-       
-      </ion-item>
-      
-      <ion-item lines="full">
-        <ion-icon name="bag-outline"/>
-        <span>{{formData.job_id?formData.job_id[1]:''}}</span>
-      </ion-item>
-      
-      <ion-item lines="none">
-        <ion-icon style="color:green"  *ngIf="formData.active" name="checkmark-circle-sharp"/>
-        <ion-icon style="color:red"  *ngIf="!formData.active" name="close-circle-sharp"/>
-      <span>{{formData.active?"Active":"Inactive"}}</span>
-      </ion-item>
-    </ion-list>
-    
-    <ion-button 
-      expand="block" 
-      color="primary" 
-      class="ion-margin-horizontal"
-      (click)="submitEnrollment()" 
-      [disabled]="!formData.display_name || !formData.image_128 || formData.job_id === null"
-    >
+  <div class="info-card">
+    <ion-item lines="none">
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+      <ion-label>{{ formData().display_name }}</ion-label>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon name="briefcase-outline" slot="start"></ion-icon>
+      <ion-label>{{ formData().job_id ? formData().job_id : '' }}</ion-label>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon [name]="formData().active ? 'checkmark-circle' : 'close-circle'" [class.active]="formData().active"
+      [class.inactive]="!formData().active" slot="start"></ion-icon>
+      <ion-label>{{ (formData().active ? 'ACTIVE': 'NOT_ACTIVE' )| translate }}</ion-label>
+    </ion-item>
+
+    <ion-button expand="block" color="primary" class="upload-btn" (click)="submitEnrollment()"
+      [disabled]="!formData().display_name || !formData().image_1024">
       <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
-      Update Photo
+      {{"UPDATE_PHOTO"|translate}}
     </ion-button>
   </div>
-    <ion-toolbar color="dark">
-      <ion-title size="small" class="ion-text-center">Status: {{ debugMessage }}</ion-title>
-    </ion-toolbar>
-  </ion-footer>
+</div>
+
+<ion-fab  vertical="bottom" horizontal="end" class="capture-fab">
+  <ion-fab-button
+    class="capture-button"
+    [class.camera-scanning]="isScanning()"
+    [class.camera-captured]="!isScanning()"
+    (click)="startDetectionLoop()">
+    <ion-icon name="camera-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+</ion-content>

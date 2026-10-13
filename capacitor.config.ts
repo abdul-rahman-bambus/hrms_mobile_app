@@ -1,17 +1,21 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'bambus.hrms.app',
   appName: 'HRMS-App',
   webDir: 'www',
-  plugins:{
-     CapacitorHttp: {
+  server: {
+    androidScheme: 'https',
+    allowNavigation: [],
+    cleartext: true,
+  },
+  plugins: {
+    CapacitorHttp: {
       "enabled": true
     },
     StatusBar: {
-      "style": "DEFAULT", // or DARK/LIGHT
-      "backgroundColor": "rgb(61, 58, 58)", // Match your app background or header color
-      "overlay": false // <-- CRITICAL FIX: Stops the webview from going behind the status bar
+      "style": "LIGHT",
+      "backgroundColor": "#388E3C"
     }
   }
 };

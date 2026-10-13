@@ -1,0 +1,172 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ "SETTINGS" | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-toggle menu="global-menu" auto-hide="false">
+        <ion-button fill="clear" aria-label="Open menu">
+          <ion-icon name="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (licenseWarningMessage()) {
+    <div (click)="goToRenewal()" style="background-color: #fff3cd; color: #856404; padding: 10px; text-align: center; border-bottom: 1px solid #ffeeba; font-weight: bold; font-size: 14px; cursor: pointer;">
+      {{ licenseWarningMessage() }}
+    </div>
+  }
+
+  <div class="header-large fade-in">
+    <h1>{{ "PREFERENCES" | translate }}</h1>
+    <p>{{ "MANAGE_ACC_SETTINGS" | translate }}</p>
+  </div>
+
+  @if (isOptimized()) {
+  <div class="section-group slide-up-1">
+    <ion-card class="warning-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="flash-outline" color="warning"></ion-icon>
+          {{ "BACKGROUND_RELIABILITY" | translate }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ "BATTERY_OPTIMIZATION_MSG" | translate }}</p>
+
+      </ion-card-content>
+      <ion-button expand="block" fill="solid" color="warning" (click)="openBatterySettings()">
+        <ion-icon slot="start" name="settings-outline"></ion-icon>
+        {{ "OPEN_APP_INFO" | translate }}
+      </ion-button>
+    </ion-card>
+  </div>
+  }
+
+  <div class="section-group slide-up-2">
+    <h3>{{ "CONFIGURATION" | translate }}</h3>
+    <div class="card-stack">
+      <div class="card-item clickable-item" (click)="openServerConfigurationPage()">
+        <div class="icon-box">
+          <ion-icon name="server-outline"></ion-icon>
+        </div>
+        <div class="content-box">
+          <div class="label">{{ "Server Configuration" | translate }}</div>
+          <div class="value subtle-value">{{ url() || ('Registered tenant connection details' | translate) }}</div>
+        </div>
+        <div class="nav-indicator">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+
+      <div class="card-item clickable-item" (click)="openPlanDetailsPage()">
+        <div class="icon-box">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+        <div class="content-box">
+          <div class="label">{{ "Plan Details" | translate }}</div>
+          <div class="value subtle-value">{{ cred()?.db || ('Current subscription and tenant status' | translate) }}</div>
+        </div>
+        <div class="nav-indicator">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+
+      <div class="card-item">
+        <div class="icon-box">
+          <ion-icon name="language-outline"></ion-icon>
+        </div>
+        <div class="content-box">
+          <div class="label">{{ "LANGUAGE" | translate }}</div>
+          <ion-select [ngModel]="selectedLanguage()" (ngModelChange)="selectedLanguage.set($event)" (ionChange)="changeLanguage()">
+            @for (lang of languages; track lang) {
+            <ion-select-option [value]="lang.code">
+              {{ lang.label }}
+            </ion-select-option>
+            }
+          </ion-select>
+        </div>
+      </div>
+
+      <div class="card-item">
+        <div class="icon-box">
+          <ion-icon name="log-in-outline"></ion-icon>
+        </div>
+        <div class="content-box">
+          <div class="label">{{ "CHECK_IN_DELAY" | translate }}</div>
+          <div class="delay-control" [class.invalid]="isDelayEmpty(check_in_delay_value())">
+            <ion-input type="number" min="0" inputmode="numeric" [ngModel]="check_in_delay_value()" (ngModelChange)="check_in_delay_value.set($event)"
+              (ionBlur)="autoSaveSettings()" required="1" class="custom-input delay-number"></ion-input>
+            <ion-select interface="popover" [ngModel]="check_in_delay_unit()" (ngModelChange)="check_in_delay_unit.set($event)" (ionChange)="autoSaveSettings()"
+              class="delay-unit-select">
+              @for (unit of delayUnits; track unit.value) {
+              <ion-select-option [value]="unit.value">{{ unit.label }}</ion-select-option>
+              }
+            </ion-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-item">
+        <div class="icon-box">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </div>
+        <div class="content-box">
+          <div class="label">{{ "CHECK_OUT_DELAY" | translate }}</div>
+          <div class="delay-control" [class.invalid]="isDelayEmpty(check_out_delay_value())">
+            <ion-input type="number" min="0" inputmode="numeric" [ngModel]="check_out_delay_value()" (ngModelChange)="check_out_delay_value.set($event)"
+              (ionBlur)="autoSaveSettings()" required="1" class="custom-input delay-number"></ion-input>
+            <ion-select interface="popover" [ngModel]="check_out_delay_unit()" (ngModelChange)="check_out_delay_unit.set($event)" (ionChange)="autoSaveSettings()"
+              class="delay-unit-select">
+              @for (unit of delayUnits; track unit.value) {
+              <ion-select-option [value]="unit.value">{{ unit.label }}</ion-select-option>
+              }
+            </ion-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-item">
+        <div class="icon-box">
+          <ion-icon name="sync-outline"></ion-icon>
+        </div>
+        <div class="content-box">
+          <div class="label">{{ "SYNC_DELAY" | translate }}</div>
+          <div class="delay-control" [class.invalid]="isDelayEmpty(sync_delay_value())">
+            <ion-input type="number" min="0" inputmode="numeric" [ngModel]="sync_delay_value()" (ngModelChange)="sync_delay_value.set($event)"
+              (ionBlur)="autoSaveSettings()" required="1" class="custom-input delay-number"></ion-input>
+            <ion-select interface="popover" [ngModel]="sync_delay_unit()" (ngModelChange)="sync_delay_unit.set($event)" (ionChange)="autoSaveSettings()"
+              class="delay-unit-select">
+              @for (unit of delayUnits; track unit.value) {
+              <ion-select-option [value]="unit.value">{{ unit.label }}</ion-select-option>
+              }
+            </ion-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-item">
+        <div class="content-box no-icon">
+          <div class="label">{{ "ENABLE_SOUNDS" | translate }}</div>
+        </div>
+        <ion-toggle #soundToggle slot="end" mode="ios" [checked]="sound()" (ionChange)="autoSaveSettings()"></ion-toggle>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-section slide-up-3">
+    <ion-button expand="block" class="primary-action" (click)="pinChange()">
+      <ion-icon slot="start" name="key-outline"></ion-icon>
+      {{ "CHANGE_MPIN" | translate }}
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" class="secondary-action" (click)="logout()">
+      <ion-icon slot="start" name="log-out-outline"></ion-icon>
+      {{ "SIGN_OUT" | translate}}
+    </ion-button>
+  </div>
+</ion-content>

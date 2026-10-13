@@ -1,0 +1,364 @@
+  body {
+    font-family   : 'Inter', sans-serif;
+    background    : #E8F5E9;
+    /* light-green */
+    min-height    : 100vh;
+    margin        : 0;
+    display       : flex;
+    flex-direction: column;
+    transition    : background-color 0.3s;
+  }
+  ion-header ion-toolbar {
+    --background: #388E3C;
+    --color: #ffffff;
+    --border-color: transparent;
+  }
+
+  header {
+    background   : #388E3C;
+    /* light-green */
+    padding      : 0 16px;
+    height       : 72px;
+    display      : flex;
+    align-items  : center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow   : 0 8px 15px rgba(56, 142, 60, 0.4);
+    position     : sticky;
+    top          : 0;
+    z-index      : 50;
+  }
+
+  .app-icon-button {
+    width          : 44px;
+    height         : 44px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    border-radius  : 50%;
+    background     : #ffffff;
+    /* card-color */
+    box-shadow     : 0 2px 5px rgba(0, 0, 0, 0.1);
+    border         : none;
+    cursor         : pointer;
+    flex-shrink    : 0;
+    transition     : transform 0.1s ease;
+  }
+
+  .app-icon-button:active {
+    transform: scale(0.95);
+  }
+
+  .header-title {
+    color      : #fff;
+    /* dark-green */
+    font-size  : 1.5rem;
+    font-weight: 600;
+    flex-grow  : 1;
+    text-align : center;
+    // margin-left: -44px;
+  }
+
+  .app-content {
+    flex-grow     : 1;
+    padding       : 24px 16px;
+    display       : flex;
+    flex-direction: column;
+    align-items   : center;
+    width         : 100%;
+    height: 100%;
+    background: #fff;
+  }
+
+  .welcome-text {
+    color        : #388E3C;
+    /* dark-green */
+    font-size    : 2rem;
+    font-weight  : 700;
+    margin-top   : 24px;
+    margin-bottom: 4px;
+    animation    : fadeIn 0.8s ease-out;
+    text-align   : center;
+  }
+
+  .subtitle {
+    color        : #333333;
+    /* text-color */
+    font-size    : 1rem;
+    margin-bottom: 32px;
+    animation    : fadeIn 1s ease-out;
+    text-align   : center;
+  }
+
+  .login-card {
+    background   : #ffffff;
+    /* card-color */
+    width        : 100%;
+    max-width    : 450px;
+    padding      : 32px 24px;
+    border-radius: 24px;
+    box-shadow   : 0 15px 40px rgba(0, 0, 0, 0.1), 0 6px 15px rgba(0, 0, 0, 0.05);
+    animation    : slideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .input-group {
+    position       : relative;
+    margin-bottom  : 20px;
+    padding        : 14px 18px;
+    border         : 1px solid #ddd;
+    border-radius  : 12px;
+    transition     : all 0.3s ease;
+    /* Added flex for internal alignment */
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+    min-height     : 56px;
+    /* Ensure sufficient height for content */
+  }
+
+  .input-group:focus-within {
+    border-color: #4CAF50;
+    /* main-green */
+    box-shadow  : 0 0 0 2px rgba(76, 175, 80, 0.3);
+  }
+
+  .input-label {
+    position   : absolute;
+    /* Kept absolute for floating/top placement */
+    top        : -10px;
+    left       : 10px;
+    background : white;
+    padding    : 0 4px;
+    color      : #689F38;
+    /* medium-green */
+    font-weight: 500;
+    font-size  : 0.8rem;
+    transition : all 0.2s ease;
+    z-index    : 10;
+    /* Ensure label is on top of border */
+  }
+
+  .input-field {
+    width       : 100%;
+    border      : none;
+    outline     : none;
+    font-size   : 1rem;
+    color       : #333333;
+    /* text-color */
+    /* Important: Reset padding/margin that might interfere with container padding */
+    padding     : 0;
+    margin      : 0;
+    line-height : 1.5;
+    background: transparent;
+    /* Good line height for text */
+    margin-top  : 5px;
+    /* Push the input down slightly from the absolute label area */
+  }
+
+
+
+
+  /* --- Button Styles --- */
+  .login-button {
+    background   : #388E3C;
+    /* dark-green */
+    color        : white;
+    padding      : 16px 24px;
+    border-radius: 12px;
+    font-weight  : 700;
+    font-size    : 1.1rem;
+    width        : 100%;
+    border       : none;
+    cursor       : pointer;
+    box-shadow   : 0 8px 15px rgba(56, 142, 60, 0.4);
+    transition   : transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+    margin-top   : 10px;
+    /* Ensure spacing above the button */
+  }
+
+  .login-button:active {
+    transform : translateY(1px);
+    box-shadow: 0 4px 10px rgba(56, 142, 60, 0.5);
+    background: #689F38;
+    /* medium-green */
+  }
+
+  .switch-link-button {
+    background : none;
+    border     : none;
+    cursor     : pointer;
+    font-size  : 0.9rem;
+    color      : #689F38;
+    /* medium-green */
+    font-weight: 600;
+    padding    : 8px;
+    transition : color 0.2s ease;
+  }
+
+  /* --- Animated Logo Section --- */
+  .logo-container {
+    position     : relative;
+    width        : 120px;
+    height       : 120px;
+    margin-bottom: 12px;
+  }
+
+  .logo-circle {
+    position       : absolute;
+    top            : 50%;
+    left           : 50%;
+    transform      : translate(-50%, -50%);
+    border-radius  : 50%;
+    background     : #E8F5E9;
+    /* light-green */
+    width          : 90px;
+    height         : 90px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    z-index        : 10;
+  }
+
+  .spinner-dot-circle {
+    position     : absolute;
+    top          : 0;
+    left         : 0;
+    width        : 100%;
+    height       : 100%;
+    border-radius: 50%;
+    border       : 2px dashed rgba(76, 175, 80, 0.5);
+  }
+
+  .dot-circle-1 {
+    animation: spin 10s linear infinite;
+  }
+
+  .dot-circle-2 {
+    width    : 110%;
+    height   : 110%;
+    top      : -5%;
+    left     : -5%;
+    border   : 2px dotted rgba(76, 175, 80, 0.3);
+    animation: spin 15s reverse linear infinite;
+  }
+
+  /* --- Keyframe Animations --- */
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity  : 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity  : 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity  : 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity  : 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* --- Custom Error Modal --- */
+  .error-modal {
+    position       : fixed;
+    top            : 0;
+    left           : 0;
+    width          : 100%;
+    height         : 100%;
+    background     : rgba(0, 0, 0, 0.6);
+    display        : none;
+    align-items    : center;
+    justify-content: center;
+    z-index        : 1000;
+    opacity        : 0;
+    transition     : opacity 0.3s ease;
+  }
+
+  .error-modal.show-modal {
+    display: flex;
+    opacity: 1;
+  }
+
+  .error-content {
+    background   : white;
+    padding      : 30px;
+    border-radius: 15px;
+    text-align   : center;
+    max-width    : 90vw;
+    box-shadow   : 0 5px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  .error-content p {
+    margin-bottom: 20px;
+    color        : #333;
+    font-weight  : 500;
+  }
+
+  .error-content button {
+    background   : #4CAF50;
+    /* main-green */
+    color        : white;
+    padding      : 8px 16px;
+    border-radius: 8px;
+    border       : none;
+    cursor       : pointer;
+  }
+
+  .use-pin-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+ .registration-section {
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .registration-text {
+    font-size: 13px; // Konjam chinna size
+    color: #666;
+    margin-bottom: 10px;
+  }
+
+  .contact-button {
+    background: transparent;
+    border: 1px solid #4CAF50; // Border thickness kuraikkalaam
+    color: #4CAF50;
+    
+    /* SIZE REDUCTION START */
+    padding: 6px 24px; // Top-bottom padding kuraichu, left-right increase pannirukkaen
+    font-size: 13px;   // Font size kuraikkalaam
+    min-width: 120px;  // Romba kuttiga aagamma irukka oru minimum width
+    /* SIZE REDUCTION END */
+    
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: none; // All caps vendaamna idhai use pannunga
+    transition: all 0.2s ease-in-out;
+
+    &:active {
+      background: #f4f4f4;
+    }
+  }
+}

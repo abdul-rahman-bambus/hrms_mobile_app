@@ -1,0 +1,165 @@
+<ion-header class="header-premium">
+  <ion-toolbar class="toolbar-premium">
+    <ion-title class="title-main">{{"ATTENDANCE" | translate}}<br />({{storage.selected_company?.name}})</ion-title>
+
+    <ion-buttons slot="end" class="nav-buttons">
+      <ion-button (click)="goTo('/employee-list')" class="nav-pill">
+        <ion-icon name="person"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="page-container">
+
+  <ion-modal [isOpen]="showTimer" (didDismiss)="showTimer = false">
+    <ng-template>
+      <div class="timer-popup">
+        <div class="timer-box premium-timer">
+
+          <div class="timer-circle">
+            <svg class="progress-ring" width="140" height="140">
+              <circle class="progress-ring__circle" stroke="url(#grad1)" stroke-width="10" fill="transparent" r="60"
+                cx="70" cy="70" />
+              <defs>
+                <linearGradient id="grad1">
+                  <stop offset="0%" stop-color="#0ea5e9" />
+                  <stop offset="100%" stop-color="#22c55e" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            <div class="timer-number">
+              {{ countdown }}
+            </div>
+          </div>
+
+          <p class="timer-text">{{"CAPTURING_IN_SECONDS" | translate:{ countdown: countdown } }}...</p>
+
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+  <ion-modal id="detectionStatus" class="detectionStatus" [isOpen]="detectPopupOpen"
+    (didDismiss)="detectedEmployee = undefined" [initialBreakpoint]="1" [breakpoints]="[1]">
+
+    <ng-template>
+
+
+
+      <div class="detect-fullscreen">
+        <div style="background-color: #8a9d52;color:white;width: 100%;text-align: center;">{{"DONT_CLOSE" | translate}}
+        </div>
+
+        <div class="top-section">
+
+          <div class="avatar-circle">
+            <!-- <ion-icon name="person" class="avatar-icon"></ion-icon> -->
+            @if (detectedImage) {
+            <img height="100" width="100" [src]="'data:image/jpeg;base64,'+detectedImage" />
+            }
+          </div>
+        </div>
+
+        <div class="content">
+          @if (operation === '') {
+          <ion-skeleton-text [animated]="true" style="width: 80px;height:20px"></ion-skeleton-text>
+          }
+          @if (operation === '') {
+          <ion-skeleton-text [animated]="true" style="width: 280px;height:20px"></ion-skeleton-text>
+          }
+          @if (operation === '') {
+          <ion-skeleton-text [animated]="true" style="width: 180px;height:20px"></ion-skeleton-text>
+          }
+          <!-- IN -->
+          @if (operation === 'in') {
+          <div class="content-box in-mode">
+            <ion-icon name="checkmark-circle" class="status-icon"></ion-icon>
+            <h3>{{"COME_IN" | translate}} 😊</h3>
+            <p class="name">{{detectedEmployee?.display_name }}</p>
+            <p class="time">⏱ {{"MARKED_AT" | translate}} <span>{{ time }}</span></p>
+          </div>
+          }
+
+          <!-- OUT -->
+          @if (operation === 'out') {
+          <div class="content-box out-mode">
+            <ion-icon name="log-out-outline" class="status-icon"></ion-icon>
+            <h3>{{"GOOD_BYE" | translate}} 👋</h3>
+            <p class="name">{{ detectedEmployee?.display_name }}</p>
+            <p class="time">⏱ {{"MARKED_AT" | translate}} <span>{{ time }}</span></p>
+          </div>
+          }
+
+        </div>
+
+
+      </div>
+
+    </ng-template>
+
+  </ion-modal>
+
+
+
+  <div class="center-wrapper">
+
+    <div class="camera-section">
+      <div class="camera-frame">
+        <div #cameraPreview id="cameraPreview" class="camera-preview"></div>
+        <canvas #overlayCanvas class="overlay-canvas"></canvas>
+
+        <!-- Loading spinner -->
+        <!-- <div class="loading-container" *ngIf="loading">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Starting camera...</p>
+       </div> -->
+
+
+        <!-- FACE FRAME OVERLAY -->
+        @if (isCameraStarted) {
+        <div class="face-frame">
+          <div class="corner tl"></div>
+          <div class="corner tr"></div>
+          <div class="corner bl"></div>
+          <div class="corner br"></div>
+        </div>
+        }
+
+
+      </div>
+
+      <!-- Detection message BELOW camera -->
+      @if (isCameraStarted) {
+      <div class="detect-message">
+        @if (detectedEmployee) {
+        <div class="footer-status">
+          @if (operation === false) {
+          <div class="status danger">
+            <ion-icon name="close-circle"></ion-icon>
+            <h3>{{"NOT_ENROLLED" | translate}}</h3>
+            <p>{{"PERSON_NOT_ENROLLED" | translate}}</p>
+          </div>
+          }
+          @if (operation === 'recent_in') {
+          <div class="status danger">
+            <ion-icon name="close-circle"></ion-icon>
+            <h3>{{"IMMEDIATE_LOGIN" | translate}}!</h3>
+            <p>{{"WAIT_FOR_CHECKIN_SECONDS" | translate:{"check_in_delay_sec":check_in_delay_sec} }}</p>
+          </div>
+          }
+          @if (operation === 'recent_out') {
+          <div class="status danger">
+            <ion-icon name="close-circle"></ion-icon>
+            <h3>{{"IMMEDIATE_LOGOUT" | translate}} !</h3>
+            <p>{{"WAIT_FOR_CHECKOUT_SECONDS" | translate:{"check_out_delay_sec":check_out_delay_sec} }}.</p>
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+
+</ion-content>

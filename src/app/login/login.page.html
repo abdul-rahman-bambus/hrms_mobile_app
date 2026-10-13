@@ -1,0 +1,135 @@
+<ion-header class="header-premium">
+  <ion-toolbar class="toolbar-premium">
+    <ion-title class="title-main">{{"LOGIN" | translate}}</ion-title>
+
+    <ion-buttons slot="end" class="nav-buttons">
+      <ion-select #langSelect [ngModel]="selectedLanguage()" (ngModelChange)="selectedLanguage.set($event)" (ionChange)="changeLanguage()" [style.display]="'none'">
+        @for (lang of languages; track lang) {
+          <ion-select-option [value]="lang.code">
+            {{ lang.label }}
+          </ion-select-option>
+        }
+      </ion-select>
+      <ion-button (click)="openLang()" style="--background:transparent;--box-shadow:none">
+        <ion-icon name="language-outline"></ion-icon>
+
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Main Content -->
+  <main class="app-content">
+
+    <!-- Animated Logo Section -->
+    <div class="logo-container">
+      <div class="logo-circle" id="main-logo-container">
+        <!-- Main Logo SVG injected here by JS -->
+        <img height="90" width="90" style="border-radius: 50%;" src="/assets/icon.png" />
+      </div>
+      <div class="spinner-dot-circle dot-circle-1"></div>
+      <div class="spinner-dot-circle dot-circle-2"></div>
+    </div>
+
+    <!-- Header Text -->
+    <h1 class="welcome-text">{{"COME_IN" | translate}}!</h1>
+    <p class="subtitle">{{ 'Secure access to attendance, employees, and everyday HR operations.' | translate }}</p>
+
+    <!-- Login Card -->
+    <div class="login-card">
+
+      <!-- PIN Login Form -->
+      @if (showPinLogin()) {
+        <div id="pinLogin">
+          <div class="input-group pin-login-group">
+            <label class="input-label">{{"ENTER_PIN" | translate}}</label>
+            <div class="pin-input-container">
+              <input
+                #pinInput
+                type="tel"
+                id="pinInput"
+                pattern="[0-9]*"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                [ngModel]="pin()"
+                (ngModelChange)="onPinInput($event)"
+                (keyup.enter)="loginWithPin()"
+                maxlength="4"
+                class="hidden-pin-input">
+
+              <div class="pin-visual-wrapper" (click)="pinInput.focus()">
+                @for (i of [0, 1, 2, 3]; track i; let idx = $index) {
+                  <div
+                    class="pin-box"
+                    [class.filled]="pin() && pin().length > idx"
+                    [class.active]="(pin().length || 0) === idx && (pin().length || 0) < 4">
+                    @if (pin() && pin().length > idx) {
+                      <span class="dot">•</span>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+          <button class="login-button" (click)="loginWithPin()" [disabled]="pin().length !== 4">
+            {{"LOGIN_WITH_PIN" | translate}}
+          </button>
+          <button class="switch-link-button auth-link-button" (click)="showForgotPinLogin()">
+            Forgot PIN?
+          </button>
+        </div>
+      }
+
+      <!-- Credential Login Form (Default) -->
+      @if (!showPinLogin()) {
+        <div id="credentialLogin">
+          @if (showUrlField()) {
+            <div class="input-group url-input-group">
+              <label class="input-label">{{'SERVER_URL' | translate}}</label>
+              <div class="url-input-row">
+                <input type="text" id="urlInput" #urlInput [ngModel]="url()" (ngModelChange)="url.set($event)" (keyup.enter)="usernameField.focus()" class="input-field"
+                  placeholder="https://www.example.com">
+                <button type="button" class="qr-scan-button" (click)="scanUrlQr()" aria-label="Scan server URL QR code">
+                  <ion-icon name="qr-code-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+          }
+          @if (!showUrlField()) {
+            <p class="helper-text">{{ 'Sign in with your saved HRMS server credentials to set a new PIN.' | translate }}</p>
+          }
+          <div class="input-group">
+            <label class="input-label">{{"USERNAME" | translate}}</label>
+            <input type="text" #usernameField id="usernameInput" (keyup.enter)="passwordField.focus()" [ngModel]="username()" (ngModelChange)="username.set($event)" class="input-field"
+              placeholder="user@company.com">
+          </div>
+          <div class="input-group mb-6">
+            <label class="input-label">{{"PASSWORD" | translate}}</label>
+            <input type="password" id="passwordInput" (keyup.enter)="loginWithCredentials()" #passwordField class="input-field" [ngModel]="password()" (ngModelChange)="password.set($event)" placeholder="••••••••">
+          </div>
+          <button class="login-button" (click)="loginWithCredentials()">
+            {{ 'LOGIN' | translate }}
+          </button>
+          <div class="auth-links">
+            <button class="switch-link-button auth-link-button" (click)="openForgotPassword()">
+              Forgot password?
+            </button>
+            @if (isPinRecoveryMode()) {
+              <button class="switch-link-button auth-link-button" (click)="showPinLoginScreen()">
+                Back to PIN login
+              </button>
+            }
+          </div>
+
+        </div>
+        <div class="registration-section">
+    <p class="registration-text">{{"FOR_REGISTRATION" | translate}}</p>
+    <button class="contact-button" (click)="contactUs()">
+      {{"CONTACT_US" | translate}}
+    </button>
+  </div>
+      }
+    </div>
+  </main>
+</ion-content>

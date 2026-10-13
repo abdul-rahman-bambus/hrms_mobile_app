@@ -1,0 +1,201 @@
+<ion-header class="header-premium">
+  <ion-toolbar class="toolbar-premium">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/settings"></ion-back-button>
+    </ion-buttons>
+    <ion-title>User Manual</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-container">
+  <div class="manual-shell">
+    <section class="hero-card">
+      <div class="hero-badge">
+        <ion-icon name="help-circle-outline"></ion-icon>
+        <span>Help & Support</span>
+      </div>
+      <h1>User Manual</h1>
+      <p>Find answers to common questions and learn how to use the HRMS app effectively.</p>
+    </section>
+
+    <ion-card class="manual-card">
+      <ion-card-header>
+        <ion-card-title class="section-title">
+          <ion-icon name="help-circle-outline"></ion-icon>
+          <span>Sign In & Workspace Access</span>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-accordion-group>
+          <ion-accordion value="login">
+            <ion-item slot="header" lines="none">
+              <ion-label>Which login screen opens first?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              The app chooses the login route automatically based on what is already saved on the device. If there is no local account data, it opens the OTP sign-in flow. If an account is saved and an MPIN is already set, it opens the PIN login screen. If an account is saved but no MPIN is available yet, it opens the username and password screen.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="pin">
+            <ion-item slot="header" lines="none">
+              <ion-label>How does OTP or password login work?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              On the OTP flow, enter your work email address or mobile number, request the OTP, verify the code, and then confirm your workspace password. If multiple tenants are linked to the same identifier, the app asks you to choose the correct tenant before continuing. On the credentials flow, enter your username and password directly, and use <strong>Forgot Password?</strong> if you need a reset link.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="company">
+            <ion-item slot="header" lines="none">
+              <ion-label>When do I need to choose a company?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              Internal users may be asked to choose a workspace after signing in. If only one company is available, the app can select it automatically. If more than one company is assigned to your account, open the company selection screen and choose the workspace you want before entering Home attendance mode.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="mpin">
+            <ion-item slot="header" lines="none">
+              <ion-label>How do PIN login and PIN recovery work?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              Existing users can unlock the app with their saved 4-digit MPIN. In some setups, you may also need to choose the company and user before entering the PIN. If you tap <strong>Forgot PIN?</strong>, the app sends you back to the credentials login flow so you can sign in with your password and set up access again from the account side.
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="manual-card">
+      <ion-card-header>
+        <ion-card-title class="section-title accent-blue">
+          <ion-icon name="time-outline"></ion-icon>
+          <span>Attendance Camera & Daily Use</span>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-accordion-group>
+          <ion-accordion value="punch">
+            <ion-item slot="header" lines="none">
+              <ion-label>How do I mark attendance?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              Attendance is marked from the <strong>Home</strong> screen using the live camera and face recognition flow. Keep location access enabled, stay inside the face frame, and wait while the app counts down, captures the face, and shows the attendance result. The green attendance modal confirms whether the action was recorded as check-in or check-out.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="offline">
+            <ion-item slot="header" lines="none">
+              <ion-label>What should I check before scanning?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              Watch the location status banner at the top of Home. If location is blocked, fix location permissions or device settings first. You can also start or stop the recognizer from the header icon. If the app says the person is not enrolled or asks you to wait before another check-in or check-out, follow that message and try again after the configured delay.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="logs">
+            <ion-item slot="header" lines="none">
+              <ion-label>How do I review attendance records?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              Open <strong>Attendance Logs</strong> from the Home menu to browse saved records. Use the date controls to move between days, open the calendar picker for a specific date, and tap any row to view the full details including check-in time, check-out time, worked hours, saved face photo, and captured location.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="admin-logs">
+            <ion-item slot="header" lines="none">
+              <ion-label>What extra attendance options do admins get?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              Admin users can switch between <strong>All Attendances</strong> and <strong>My Attendances</strong> from the logs screen. They can also use the sync action from the logs header to pull the latest attendance data for the selected day.
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="manual-card">
+      <ion-card-header>
+        <ion-card-title class="section-title accent-gold">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <span>Profile, Enrollment & Settings</span>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-accordion-group>
+          <ion-accordion value="password">
+            <ion-item slot="header" lines="none">
+              <ion-label>What can I do from My Profile?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              The <strong>Profile</strong> page shows your current company, employee name, role, active status, and whether your face is enrolled. From there you can start or update self-enrollment, jump back to the attendance camera, open your attendance history, refresh profile data, or remove the account from the current device.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="profile">
+            <ion-item slot="header" lines="none">
+              <ion-label>How do I enroll or update my face?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              Open <strong>Profile</strong> and use the self-enrollment action. If you are already enrolled, the same action lets you update your face image. Admin users can also open the <strong>Employees</strong> page, switch between enrolled and not-enrolled staff, search for a person, and open the enrollment flow for that employee.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="settings">
+            <ion-item slot="header" lines="none">
+              <ion-label>What settings can I manage in the app?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              The <strong>Settings</strong> page includes background reliability guidance, a link to app info for battery settings, language selection, check-in delay, check-out delay, sync delay, sound preference, MPIN change, and sign out. It also links to <strong>Server Configuration</strong> and <strong>Plan Details</strong> so you can review your tenant connection and subscription status.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="server">
+            <ion-item slot="header" lines="none">
+              <ion-label>Can I edit tenant connection details here?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              No. The server configuration page is read-only in this app. It shows the saved plan, server URL, database name, company, username, password masking, and sync delay for the registered tenant connection currently stored on the device.
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="manual-card">
+      <ion-card-header>
+        <ion-card-title class="section-title accent-red">
+          <ion-icon name="build-outline"></ion-icon>
+          <span>Registration, Offline Mode & Support</span>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-accordion-group>
+          <ion-accordion value="sync">
+            <ion-item slot="header" lines="none">
+              <ion-label>How do I start if I am a new user?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              If no local account is saved yet, the app opens the OTP entry flow first. From there you can continue with your tenant sign-in or use <strong>Register New Account</strong> if your organization is onboarding a new HRMS workspace. After registration or first login, finish company selection if prompted and then proceed to Home.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="support">
+            <ion-item slot="header" lines="none">
+              <ion-label>What happens when the device is offline?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              The app shows a dedicated offline page when network access is unavailable and keeps checking for reconnection automatically. Attendance and employee data are stored locally for the selected company, and syncing resumes when the device comes back online and the normal app flow continues.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="license">
+            <ion-item slot="header" lines="none">
+              <ion-label>What should I do if I see plan or license warnings?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              Login screens can show tenant or license notices when the workspace needs attention. Use the renewal action if your flow provides it, or open <strong>Settings</strong> &gt; <strong>Plan Details</strong> to review the current plan, tenant status, expiry information, and the latest saved workspace details.
+            </div>
+          </ion-accordion>
+          <ion-accordion value="contact">
+            <ion-item slot="header" lines="none">
+              <ion-label>Where can I get help from inside the app?</ion-label>
+            </ion-item>
+            <div class="accordion-content" slot="content">
+              Use the <strong>Help</strong> button on the login screens to open this manual at any time. If you need direct assistance, open the <strong>Contact</strong> page and send your details to the support team, or contact your organization’s HR or IT team for tenant-specific access issues.
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

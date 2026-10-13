@@ -1,0 +1,179 @@
+:host {
+  --manual-primary       : #388e3c;
+  --manual-primary-dark  : #1f6d24;
+  --manual-primary-soft  : #e8f5e9;
+  --manual-accent-blue   : #2563eb;
+  --manual-accent-gold   : #d97706;
+  --manual-accent-red    : #dc2626;
+  --manual-surface       : rgba(255, 255, 255, 0.92);
+  --manual-surface-strong: #ffffff;
+  --manual-border        : rgba(15, 23, 42, 0.08);
+  --manual-text          : #0f172a;
+  --manual-text-soft     : #64748b;
+}
+
+.header-premium ion-toolbar {
+  --background  : #388e3c;
+  --color       : #ffffff;
+  --border-width: 0;
+  box-shadow    : 0 12px 30px rgba(31, 109, 36, 0.18);
+}
+
+.toolbar-premium {
+  --padding-start: 8px;
+  --padding-end  : 12px;
+}
+
+.page-container {
+  --background: linear-gradient(180deg, #effaf1 0%, #f8fafc 42%, #eef6ff 100%);
+}
+
+.manual-shell {
+  padding  : 18px 16px 28px;
+  display  : flex;
+  flex-direction: column;
+  gap      : 16px;
+}
+
+.hero-card {
+  padding        : 22px 18px;
+  border-radius  : 24px;
+  background     : linear-gradient(135deg, rgba(56, 142, 60, 0.12) 0%, rgba(255, 255, 255, 0.95) 72%);
+  border         : 1px solid rgba(56, 142, 60, 0.12);
+  box-shadow     : 0 18px 40px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(12px);
+
+  h1 {
+    margin        : 14px 0 8px;
+    color         : var(--manual-text);
+    font-size     : 1.65rem;
+    font-weight   : 800;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin     : 0;
+    color      : var(--manual-text-soft);
+    font-size  : 0.96rem;
+    line-height: 1.6;
+  }
+}
+
+.hero-badge {
+  width          : fit-content;
+  display        : inline-flex;
+  align-items    : center;
+  gap            : 8px;
+  padding        : 8px 12px;
+  border-radius  : 999px;
+  background     : rgba(56, 142, 60, 0.12);
+  color          : var(--manual-primary-dark);
+  font-size      : 0.82rem;
+  font-weight    : 700;
+  letter-spacing : 0.02em;
+
+  ion-icon {
+    font-size: 1rem;
+  }
+}
+
+.manual-card {
+  margin        : 0;
+  border-radius : 22px;
+  background    : var(--manual-surface);
+  border        : 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow    : 0 16px 34px rgba(15, 23, 42, 0.08);
+  overflow      : hidden;
+}
+
+.manual-card ion-card-header {
+  padding: 18px 18px 12px;
+}
+
+.manual-card ion-card-content {
+  padding: 0 18px 18px;
+}
+
+.section-title {
+  display       : flex;
+  align-items   : center;
+  gap           : 10px;
+  font-size     : 1.08rem;
+  font-weight   : 700;
+  color         : var(--manual-text);
+
+  ion-icon {
+    font-size    : 1.35rem;
+    color        : var(--manual-primary);
+    padding      : 8px;
+    border-radius: 12px;
+    background   : rgba(56, 142, 60, 0.12);
+  }
+}
+
+.section-title.accent-blue ion-icon {
+  color     : var(--manual-accent-blue);
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.section-title.accent-gold ion-icon {
+  color     : var(--manual-accent-gold);
+  background: rgba(217, 119, 6, 0.12);
+}
+
+.section-title.accent-red ion-icon {
+  color     : var(--manual-accent-red);
+  background: rgba(220, 38, 38, 0.12);
+}
+
+ion-accordion-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: transparent;
+}
+
+ion-accordion {
+  border-radius: 18px;
+  border       : 1px solid var(--manual-border);
+  background   : var(--manual-surface-strong);
+  overflow     : hidden;
+  box-shadow   : inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+ion-item[slot="header"] {
+  --background         : transparent;
+  --color              : var(--manual-text);
+  --padding-start      : 16px;
+  --padding-end        : 16px;
+  --inner-padding-end  : 0;
+  --min-height         : 58px;
+  font-weight          : 700;
+}
+
+ion-item[slot="header"]::part(native) {
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.96) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+.accordion-content {
+  padding    : 0 16px 16px;
+  color      : var(--manual-text-soft);
+  font-size  : 0.95rem;
+  line-height: 1.7;
+}
+
+strong {
+  color: var(--manual-text);
+}
+
+@media (min-width: 768px) {
+  .manual-shell {
+    max-width: 860px;
+    margin   : 0 auto;
+    padding  : 24px 20px 36px;
+  }
+
+  .hero-card {
+    padding: 26px 24px;
+  }
+}

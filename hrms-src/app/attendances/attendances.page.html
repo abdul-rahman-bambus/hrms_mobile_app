@@ -1,0 +1,211 @@
+<ion-header [translucent]="true" class="ion-no-border fabulous-dark-content">
+  <ion-toolbar>
+    <ion-title class="header-title">{{"EMPLOYEE_ATTENDANCE" | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="syncAttendance()" aria-label="Sync attendance">
+        <ion-icon slot="icon-only" name="sync-outline"></ion-icon>
+      </ion-button>
+      <!-- <ion-button fill="clear" aria-label="Search" (click)="switchFilter()">
+      <ion-icon name="search-outline"></ion-icon>
+    </ion-button> -->
+    <ion-button fill="clear" aria-label="Settings" [routerLink]="['/settings']">
+      <ion-icon name="settings-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+<div class="date-nav-container">
+
+  <!-- Previous Day -->
+  <ion-button fill="clear" class="nav-btn" (click)="goPrevious()">
+    <ion-icon name="chevron-back-outline"></ion-icon>
+  </ion-button>
+
+  <!-- Selected Date -->
+  <ion-item lines="none" class="date-display">
+    <div>{{ selectedDate | date: 'dd MMM yyyy' }}</div>
+  </ion-item>
+
+  <!-- Pick Date -->
+  <ion-button fill="clear" class="nav-btn" (click)="showCalendar()">
+    <ion-icon name="calendar-outline"></ion-icon>
+  </ion-button>
+
+  <!-- Next Day -->
+  <ion-button fill="clear" class="nav-btn" (click)="goNext()">
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+  </ion-button>
+
+</div>
+
+</ion-header>
+
+<ion-content class="attendance-content">
+
+
+
+  <!-- Hidden ionic datetime -->
+  <!-- DATE PICKER MODAL -->
+  <!-- DATE PICKER MODAL -->
+
+
+
+  <ion-modal [isOpen]="isCalendarOpen" [keepContentsMounted]="true" id="calendarModal" cssClass="premium-calendar-modal"
+    (didDismiss)="isCalendarOpen = false" #calendarModal>
+    <ng-template>
+      <ion-content class="calendar-modal-content">
+        <div class="calendar-wrapper">
+          <div class="calendar-card">
+            <!-- Header -->
+            <div class="calendar-header">
+              <div class="calendar-icon">
+                <ion-icon name="calendar-outline"></ion-icon>
+              </div>
+              <div>
+                <h2 class="calendar-title">{{ "SELECT_A_DATE" | translate  }}</h2>
+                <p class="calendar-subtitle">
+                  {{ "CHOOSE_DATE_CONFIRM" | translate }}
+                </p>
+              </div>
+
+              <div class="spacer"></div>
+
+              <ion-button fill="clear" class="close-btn" (click)="closeCalendar(false)">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </div>
+
+            <!-- Datetime -->
+            <div class="calendar-datetime-wrapper">
+              @if (showDatetime) {
+                <ion-datetime class="premium-datetime" [value]="selectedDate.toISOString()" presentation="date"
+                preferWheel="false" (ionChange)="onDatePicked($event);" [locale]="current_lang"></ion-datetime>
+              }
+            </div>
+
+            <!-- Actions -->
+            <div class="calendar-footer">
+              <ion-button expand="block" class="calendar-done-btn" (click)="closeCalendar(true)">
+                <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+                {{ "DONE" | translate  }}
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+
+  <!-- Animated Filter Panel -->
+  <!-- <div class="filter-container" *ngIf="showFilter">
+  <div class="filter-inner">
+    <ion-item lines="none" class="search-item">
+      <ion-input placeholder="Search employee name" [(ngModel)]="employeeSearch" (ionInput)="filterData()"
+        name="employeeSearch" clear-input>
+      </ion-input>
+      <ion-icon name="search-outline" slot="end" class="search-icon"></ion-icon>
+    </ion-item>
+
+    <div class="date-filters">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-item lines="none" class="date-item">
+              <ion-label position="stacked">From Date</ion-label>
+              <ion-input type="date" [(ngModel)]="fromDate" name="fromDate" (ionChange)="filterData()">
+              </ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="6">
+            <ion-item lines="none" class="date-item">
+              <ion-label position="stacked">To Date</ion-label>
+              <ion-input type="date" [(ngModel)]="toDate" name="toDate" (ionChange)="filterData()">
+              </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div class="filter-actions">
+      <ion-button expand="block" color="primary" (click)="clearFilters()">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Clear Filters
+      </ion-button>
+    </div>
+  </div>
+</div> -->
+
+<!-- Attendance list -->
+<!-- <button (click)="deleteAttendances()">Delete attnedance</button> -->
+<div class="attendance-list-wrapper">
+  @if (filteredAttendances.length > 0) {
+    <ion-list lines="none" class="attendance-list">
+      @for (att of filteredAttendances; track att; let i = $index) {
+        <ion-item button detail="false"
+          (click)="showAttendanceDetails(att)" class="attendance-card" [attr.data-index]="i">
+          <ion-label class="card-label">
+            <div class="card-top">
+              <h2 class="emp-name">{{ att.employee_name }}</h2>
+              <div class="status-wrap">
+                <!-- <span class="status-dot" [class.active]="att.is_active"></span> -->
+                <!-- <span class="status-text">{{ att.is_active ? 'Active' : 'Inactive' }}</span> -->
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="info">
+                <div class="info-row"><small>{{"CHECK_IN" |translate}}</small><strong>{{ att.display_check_in || '-' }}</strong></div>
+                <div class="info-row"><small>{{ "CHECK_OUT" | translate}}</small><strong>{{ att.display_check_out || '-' }}</strong></div>
+                <div class="info-row"><small>{{ "WORKED" | translate}}</small><strong>{{ att.display_worked_hours || 0 }}h</strong></div>
+              </div>
+            </div>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" class="chev"></ion-icon>
+        </ion-item>
+      }
+    </ion-list>
+  }
+
+  <!-- <ion-spinner *ngIf="loading" name="circular" class="spinner-center"></ion-spinner> -->
+
+  <!-- <ion-item class="load-more" lines="none" (click)="fetchMoreAttendances()">
+  <div class="load-text">Load more</div>
+  <ion-icon name="sync-outline" slot="end" class="load-icon"></ion-icon>
+</ion-item> -->
+
+@if (!loading && (!filteredAttendances || filteredAttendances.length === 0)) {
+  <div class="no-data">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ "NO_REC_FOUND" | translate }}</p>
+  </div>
+}
+</div>
+
+</ion-content>
+
+<ion-footer trigger="open-modal-fab" class="footer-modal">
+  <div class="modal-options-container">
+
+    <div class="modal-option footer-icon" (click)="goTo('/employee-list')">
+      <div class="option-icon-wrapper staff">
+        <ion-icon name="people"></ion-icon>
+      </div>
+      <p>{{ "ENROLLMENTS" | translate }}</p>
+    </div>
+
+    <div class="modal-option primary-action" (click)="goTo('/home')">
+      <div class="option-icon-wrapper camera">
+        <ion-icon name="camera-outline"></ion-icon>
+      </div>
+    </div>
+
+    <div class="modal-option footer-icon" (click)="goTo('/attendances')">
+      <div class="option-icon-wrapper logs" [style.color]="(router.url==='/attendances')?'#2565f0':''">
+        <ion-icon name="list"></ion-icon>
+      </div>
+      <p>{{ "LOGS" | translate}}</p>
+    </div>
+
+  </div>
+</ion-footer>

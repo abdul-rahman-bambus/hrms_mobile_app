@@ -1,0 +1,207 @@
+<ion-content class="register-content">
+
+  <div class="background-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <div class="register-container">
+
+    <!-- Register Card -->
+    <div class="register-card animate-up">
+
+      <!-- Back Button -->
+      <div class="header-nav">
+        <ion-button fill="clear" class="back-btn" routerLink="/login/otp">
+          <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="card-header">
+        <h2 class="title-text">{{ 'Create Account' | translate }}</h2>
+        <p class="subtitle-text">{{ 'Join BambusHRMS to manage your business.' | translate }}</p>
+      </div>
+
+      <form [formGroup]="registerForm" class="form-body">
+
+        <!-- Name -->
+        <div class="input-group animate-item" style="animation-delay: 0.1s;"
+          [class.input-group-invalid]="hasRegisterError('name')">
+          <div class="input-icon">
+            <ion-icon name="person-outline"></ion-icon>
+          </div>
+          <ion-input [placeholder]="'Full Name' | translate" formControlName="name" class="custom-input"></ion-input>
+          @if ((registerForm.controls['name'].value || '').length > 0) {
+          <button type="button" class="input-action-btn" (click)="clearRegisterField('name')">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </button>
+          }
+        </div>
+        @if (hasRegisterError('name')) {
+        <ion-text color="danger">
+          <p class="field-error">{{ 'Full name is required.' | translate }}</p>
+        </ion-text>
+        }
+
+        <!-- Company Name -->
+        <div class="input-group animate-item" style="animation-delay: 0.18s;"
+          [class.input-group-invalid]="hasRegisterError('company_name')">
+          <div class="input-icon">
+            <ion-icon name="storefront-outline"></ion-icon>
+          </div>
+          @if (!isExistingDatabase()) {
+          <ion-input [placeholder]="'Company Name' | translate" formControlName="company_name" class="custom-input">
+          </ion-input>
+          }
+
+          @if (isExistingDatabase()) {
+          <ion-select [placeholder]="'Select Company' | translate" formControlName="company_name" class="custom-input"
+            interface="popover">
+            @for (item of existingCompanies(); track item) {
+            <ion-select-option [value]="item.company_name">
+              {{ item.company_name }}
+            </ion-select-option>
+            }
+          </ion-select>
+          }
+        </div>
+        @if (hasRegisterError('company_name')) {
+        <ion-text color="danger">
+          <p class="field-error">{{ 'Company name is required.' | translate }}</p>
+        </ion-text>
+        }
+
+        <!-- Mobile -->
+        <div class="input-group animate-item" style="animation-delay: 0.2s;"
+          [class.input-group-invalid]="hasRegisterError('mobile_number')">
+          <div class="input-icon">
+            <ion-icon name="call-outline"></ion-icon>
+          </div>
+          <ion-input type="tel" [placeholder]="'Mobile Number' | translate" formControlName="mobile_number" required
+            class="custom-input" maxlength="10" (ionInput)="onRegisterMobileInput($event)"></ion-input>
+          @if ((registerForm.controls['mobile_number'].value || '').length > 0) {
+          <button type="button" class="input-action-btn" (click)="clearRegisterField('mobile_number')">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </button>
+          }
+        </div>
+        @if (hasRegisterError('mobile_number')) {
+        <ion-text color="danger">
+          <p class="field-error">
+            {{ registerForm.controls['mobile_number'].errors?.['required'] ? ('Phone number is required.' | translate) :
+            ('Enter a valid 10-digit phone number.' | translate) }}
+          </p>
+        </ion-text>
+        }
+
+        <!-- Email -->
+        <div class="input-group animate-item" style="animation-delay: 0.25s;"
+          [class.input-group-invalid]="hasRegisterError('email')">
+          <div class="input-icon">
+            <ion-icon name="mail-outline"></ion-icon>
+          </div>
+          <ion-input type="email" [placeholder]="'Email Address' | translate" formControlName="email"
+            class="custom-input"></ion-input>
+          @if ((registerForm.controls['email'].value || '').length > 0) {
+          <button type="button" class="input-action-btn" (click)="clearRegisterField('email')">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </button>
+          }
+        </div>
+        @if (hasRegisterError('email')) {
+        <ion-text color="danger">
+          <p class="field-error">
+            {{ registerForm.controls['email'].errors?.['required'] ? ('Email address is required.' | translate) :
+            ('Enter a valid email address.' | translate) }}
+          </p>
+        </ion-text>
+        }
+
+        <!-- Password -->
+        <div class="input-group animate-item" style="animation-delay: 0.3s;"
+          [class.input-group-invalid]="hasRegisterError('password')">
+          <div class="input-icon clickable" (click)="toggleRegisterPasswordVisibility()">
+            <ion-icon [name]="showPassword() ? 'lock-open-outline' : 'lock-closed-outline'"></ion-icon>
+          </div>
+          <ion-input [type]="showPassword() ? 'text' : 'password'" [placeholder]="'New password' | translate"
+            formControlName="password" class="custom-input"></ion-input>
+          @if ((registerForm.controls['password'].value || '').length > 0) {
+          <button type="button" class="input-action-btn" (click)="clearRegisterField('password')">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </button>
+          }
+        </div>
+        @if (hasRegisterError('password')) {
+        <ion-text color="danger">
+          <p class="field-error">{{ 'Password is required.' | translate }}</p>
+        </ion-text>
+        }
+
+        <!-- Action Button -->
+        <div class="action-section animate-item" style="animation-delay: 0.4s;">
+          <ion-button expand="block" class="register-btn" [disabled]="registerForm.invalid"
+            (click)="handleOfflineRegistration()">
+            {{ 'Request OTP' | translate }}
+            <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+          </ion-button>
+        </div>
+
+      </form>
+
+      <div class="footer-link animate-item" style="animation-delay: 0.5s;">
+        <p>{{ 'Already have an account?' | translate }} <a routerLink="/login/credentials">{{ 'Login' | translate }}</a>
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <ion-modal [isOpen]="showOtpModal()" (didDismiss)="closeOtpModal()" (didPresent)="focusOtpInput()">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <div class="card-header">
+          <h2 class="title-text">{{ 'Enter OTP' | translate }}</h2>
+          <p class="subtitle-text">{{ 'We sent an OTP to your registered email. Enter it to continue.' | translate }}
+          </p>
+        </div>
+        <div class="otp-pin-group">
+          <div class="pin-display-wrapper otp-pin-wrapper" (click)="focusOtpInput()">
+            <ion-input #otpInput type="tel" inputmode="numeric" [maxlength]="otpLength"
+              class="hidden-input otp-hidden-input" [ngModel]="otpCode()" (ngModelChange)="onOtpCodeChange($event)"
+              (ionFocus)="otpFocused.set(true)" (ionBlur)="otpFocused.set(false)" (keyup.enter)="submitOtpAndRegister()">
+            </ion-input>
+
+            <div class="pin-dots-container otp-digits-container">
+              @for (idx of otpIndices; track idx) {
+              <div class="pin-dot-box otp-digit-box" [class.filled]="(otpCode() || '').length > idx"
+                [class.active]="(otpCode() || '').length === idx && otpFocused()">
+                @if ((otpCode() || '').length > idx) {
+                <span class="otp-digit">{{ otpCode()[idx] }}</span>
+                }
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="otp-timer-chip" [class.expired]="isOtpExpired()">
+          <ion-icon [name]="isOtpExpired() ? 'time-outline' : 'timer-outline'"></ion-icon>
+          <span>{{ otpTimerText() }}</span>
+        </div>
+        <div class="otp-resend-row">
+          <ion-button fill="clear" class="otp-resend-btn" [disabled]="!canResendOtp()" (click)="resendOtp()">
+            {{ otpResendText() }}
+          </ion-button>
+        </div>
+        <div class="action-section" style="margin-top: 20px;">
+          <ion-button expand="block" class="register-btn otp-submit-btn"
+            [disabled]="(otpCode() || '').length !== otpLength || isOtpExpired()" (click)="submitOtpAndRegister()">
+            {{ 'Submit OTP' | translate }}
+          </ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

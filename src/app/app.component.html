@@ -1,9 +1,49 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
- 
-  
+  <ion-menu
+    side="end"
+    menuId="global-menu"
+    contentId="main-content"
+    type="overlay"
+    class="app-global-menu"
+    (ionWillOpen)="onMenuOpen()"
+    (ionDidClose)="onMenuClose()"
+    [disabled]="!showGlobalMenu">
+    <ion-header class="ion-no-border app-menu-header">
+      <ion-toolbar>
+        <ion-title>{{ storage.selected_company?.name || ('HRMS_MENU' | translate) }}</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="app-menu-content">
+      <div class="app-menu-hero">
+        <div class="app-menu-eyebrow">{{ 'WORKSPACE_NAVIGATION' | translate }}</div>
+        <p>{{ 'OPEN_HRMS_SECTIONS' | translate }}</p>
+      </div>
+
+      <ion-list lines="none" class="app-menu-list">
+        @for (item of visibleMenuItems; track item.route) {
+          <ion-menu-toggle auto-hide="true">
+            <ion-item
+              button
+              detail="false"
+              class="app-menu-item"
+              [class.active]="isActiveMenuRoute(item.route)"
+              (click)="navigateFromMenu(item.route)">
+              <ion-icon slot="start" [name]="item.icon"></ion-icon>
+              <ion-label>{{ item.labelKey | translate }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        }
+
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button detail="false" class="app-menu-item danger" (click)="logoutFromMenu()">
+            <ion-icon slot="start" name="log-out-outline"></ion-icon>
+            <ion-label>{{ 'LOGOUT' | translate }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main-content" [animation]="myCustomPageTransition"></ion-router-outlet>
 </ion-app>
- 
-  
-
-

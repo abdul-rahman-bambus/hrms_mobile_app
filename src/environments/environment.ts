@@ -3,7 +3,25 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  subscriptionServerBaseUrl: 'http://192.168.1.61:1050',
+  //live keys
+  mobileApiAppId: 'bambus_mobile_at7hvcrc0whw',
+  mobileApiAppSecret: 'SRYpmfzTdAP17htRuCqSmSGLdTxXq-LBkJaCG2kzWjEECWRlgtwYzIYLuzjdC9a4',
+  //local keys
+  // mobileApiAppId: 'bambus_android_lw1k2zat6lns',
+  // mobileApiAppSecret: 'U-jtLwxTA8yMMZ4kWDyDl54GUm5eFgKsm_B6dMd2PQ2XH-4ptRPSmimpL6l_LbnC',
+  registerPlan: "hr18",
+  razorpay: {
+    // Demo / test credentials for the license-renewal flow. Replace with backend-issued order flow before production use.
+    key_id: 'rzp_test_SGqbduOOPqlYwL',
+    key_secret: '7v824yCxR8K005E7FYO8nl3Y',
+    // Optional backend ids used by /mobile/payments/initialize when payment.transaction requires them.
+    payment_provider_id: 0,
+    payment_method_id: 0,
+    payment_method_code: 'card'
+  },
+  // api: 'http://192.168.1.63:10625/'
 };
 
 /*

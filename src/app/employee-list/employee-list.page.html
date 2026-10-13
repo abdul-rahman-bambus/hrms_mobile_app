@@ -1,103 +1,138 @@
-<ion-header [translucent]="true" class="ion-no-border">
+<ion-header [translucent]="true" class="ion-no-border fabulous-dark-content">
   <ion-toolbar>
-   
-
-    <ion-buttons slot="end">
-       <ion-button (click)="syncUsers()" fill="clear">
-        Sync Users
-      </ion-button>
-      <ion-button><ion-icon slot="icon-only" name="search-outline"></ion-icon></ion-button>
-      <ion-button><ion-icon slot="icon-only" name="notifications-outline"></ion-icon></ion-button>
-
+    <ion-title class="header-title">{{"EMPLOYEES" | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <!-- <ion-button fill="clear" (click)="clearAllEmployeeDataDebug()" [disabled]="loading() || isSyncing()"
+        title="Delete Master Employees (Debug)" color="danger">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button> -->
+      <ion-button fill="clear" (click)="syncUsers()" [disabled]="loading() || isSyncing()" aria-label="Sync users">
+        <ion-icon slot="icon-only" name="sync-outline" [class.sync-spinning]="isSyncing()"></ion-icon>
+      </ion-button>
+      <ion-menu-toggle menu="global-menu" auto-hide="false">
+        <ion-button fill="clear" aria-label="Open menu">
+          <ion-icon name="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+    @if (loading() || isSyncing()) {
+    <ion-progress-bar class="page-sync-progress" type="indeterminate"></ion-progress-bar>
+    }
   </ion-toolbar>
+
+  <ion-segment [value]="storage.employee_filter_status" mode="md" class="filter-tabs">
+    <ion-segment-button value="not_enrolled" content-id="not_enrolled">
+      <ion-label>{{"NOT_ENROLLED_CAPS" | translate}}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="enrolled" content-id="enrolled">
+      <ion-label>{{"ENROLLED_CAPS" | translate}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
 
-<ion-content>
-  <div class="content-header">
-    <h1>Employee</h1>
-
-    <div class="search-bar-container">
-      <ion-searchbar 
-        placeholder="Search employee"
-        (ionInput)="onSearchInput($event)"
-        class="custom-search"
-        debounce="300"
-      ></ion-searchbar>
-      <ion-button color="success" size="default" class="add-button">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </div>
-
-    <ion-segment 
-      [value]="filterStatus" 
-      (ionChange)="segmentChanged($event)"
-      mode="md"
-      class="filter-segment"
-    >
-      <ion-segment-button value="All">
-        <ion-label>All</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="Active">
-        <ion-label>Active</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="Inactive">
-        <ion-label>Inactive</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+<ion-content class="fabulous-dark-content">
+  @if (licenseWarningMessage()) {
+  <div (click)="goToRenewal()"
+    style="background-color: #fff3cd; color: #856404; padding: 10px; text-align: center; border-bottom: 1px solid #ffeeba; font-weight: bold; font-size: 14px; cursor: pointer;">
+    {{ licenseWarningMessage() }}
+  </div>
+  }
+  <div class="search-header">
+    <ion-searchbar [placeholder]="storage.translate.instant('SEARCH_EMP_PLACEHOLDER')"
+      (ionInput)="onSearchInput($event)" debounce="300" animated class="glass-searchbar"></ion-searchbar>
   </div>
 
-  <ion-list lines="none" class="employee-list-card">
-    <ng-container>
-      <ion-item *ngIf="loading">
-  <ion-spinner name="circular"></ion-spinner>
-</ion-item>
-    <ion-item *ngFor="let emp of filteredEmployees" class="employee-item" (click)="openEnrollmentForm(emp)" detail="false">
-      <ion-avatar slot="start" class="employee-avatar">
-        <img [src]="emp.image_128?('data:image/png;base64,'+emp.image_128) :'../../assets/person.png'" [alt]="emp.display_name">
-      </ion-avatar>
+  <ion-segment-view>
+    <ion-segment-content id="not_enrolled">
 
-      <ion-label>
-        <div class="status-tags">
-          <ion-chip color="success" [outline]="true" size="small" *ngIf="emp.active">
-           Active
-          </ion-chip>
-           <ion-chip color="danger" [outline]="true" size="small" *ngIf="!emp.active">
-           Archived
-          </ion-chip>
-        </div>
+      @if (filteredNonEnrolledEmployees().length === 0 && !loading()) {
+      <div class="empty-block">
+        <div class="glow-circle"></div>
+        <h2>{{"NO_STAFF_FOUND" | translate}}</h2>
+        <p>{{"ADJUST_FILTER_MSG" | translate}}</p>
+      </div>
+      }
 
-        <h2>{{ emp.display_name }}</h2>
-        <p>{{ emp.job_id[1] }}</p>
-      </ion-label>
-      
-      <ion-icon slot="end"  name="ellipsis-vertical" color="medium"></ion-icon>
-    </ion-item>
-    </ng-container>
-  </ion-list>
+      @if (filteredNonEnrolledEmployees().length > 0) {
+      <ion-list lines="none" class="fabulous-list">
+        @for (emp of filteredNonEnrolledEmployees(); track emp.id) {
+        <ion-item (click)="openEnrollmentForm(emp)" class="fabulous-card">
+          <div class="emp-avatar">
+            <img [src]="getFormattedImage(emp.image_1024)" [alt]="emp.display_name" />
+          </div>
+          <div class="emp-details">
+            <div class="emp-top">
+              <h3>{{ emp.display_name }}</h3>
+              <span class="emp-status" [class.active]="emp.active" [class.inactive]="!emp.active">
+                {{ (emp.active ? 'ACTIVE':'INACTIVE') | translate }}
+              </span>
+            </div>
+          </div>
+        </ion-item>
+        }
+      </ion-list>
+      }
+
+    </ion-segment-content>
+    <ion-segment-content id="enrolled">
+      @if (filteredEnrolledEmployees().length === 0 && !loading()) {
+      <div class="empty-block">
+        <div class="glow-circle"></div>
+        <h2>{{"NO_STAFF_FOUND" | translate}}</h2>
+        <p>{{"ADJUST_FILTER_MSG" | translate}}</p>
+      </div>
+      }
+
+      @if (filteredEnrolledEmployees().length > 0) {
+      <ion-list lines="none" class="fabulous-list">
+        @for (emp of filteredEnrolledEmployees(); track emp.id) {
+        <ion-item (click)="openEnrollmentForm(emp)" class="fabulous-card">
+          <div class="emp-avatar">
+            <img [src]="getFormattedImage(emp.image_1024)" [alt]="emp.display_name" />
+          </div>
+          <div class="emp-details">
+            <div class="emp-top">
+              <h3>{{ emp.display_name }}</h3>
+              <span class="emp-status" [class.active]="emp.active" [class.inactive]="!emp.active">
+                {{ (emp.active ? 'ACTIVE':'INACTIVE') | translate }}
+              </span>
+            </div>
+          </div>
+        </ion-item>
+        }
+      </ion-list>
+      }
+
+    </ion-segment-content>
+  </ion-segment-view>
+
 </ion-content>
 
-<ion-footer class="custom-footer">
-  <ion-toolbar>
-    <ion-tabs>
-      <ion-tab-bar slot="bottom" class="custom-tab-bar">
-        <ion-tab-button class="active-tab">
-          <ion-icon name="home"></ion-icon>
-          <ion-label>Home</ion-label>
-        </ion-tab-button>
-        <ion-tab-button>
-          <ion-icon name="calendar-number"></ion-icon>
-        </ion-tab-button>
-        <ion-tab-button>
-          <ion-icon name="location"></ion-icon>
-        </ion-tab-button>
-        <ion-tab-button>
-          <ion-icon name="document-text"></ion-icon>
-        </ion-tab-button>
-        <ion-tab-button>
-          <ion-icon name="help-circle"></ion-icon>
-        </ion-tab-button>
-      </ion-tab-bar>
-    </ion-tabs>
+<ion-footer class="footer-modal">
+  <ion-toolbar class="footer-toolbar">
+    <div class="modal-options-container">
+      <div class="modal-option footer-icon" (click)="goTo('/employee-list')">
+        <div class="option-icon-wrapper staff">
+          <ion-icon name="people"></ion-icon>
+        </div>
+        <span class="footer-label">{{"ENROLLMENTS" | translate}}</span>
+      </div>
+
+      <div class="modal-option primary-action" (click)="goTo('/home')">
+        <div class="option-icon-wrapper camera">
+          <ion-icon name="camera-outline"></ion-icon>
+        </div>
+      </div>
+
+      <div class="modal-option footer-icon" (click)="goTo('/attendances')">
+        <div class="option-icon-wrapper logs">
+          <ion-icon name="list"></ion-icon>
+        </div>
+        <span class="footer-label">{{"LOGS" | translate}}</span>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-footer>

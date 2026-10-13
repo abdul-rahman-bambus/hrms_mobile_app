@@ -1,0 +1,83 @@
+<ion-header class="header-white">
+  <ion-toolbar class="toolbar-premium">
+    <ion-buttons slot="start" >
+      <ion-back-button class="toolbar-premium-btn" defaultHref="/employee-list" ></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="title-main">{{ "FACE_ENROLLMENT" |translate }}</div>
+      <!-- <div class="title-sub">Smart Biometric Capture</div> -->
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="page-container">
+
+  <!-- CENTER WRAPPER (new fix) -->
+  <div class="center-wrapper">
+    @if (networkProgress) {
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+    }
+    <!-- CAMERA SECTION -->
+    <div class="camera-wrapper">
+      <div #cameraPreview id="cameraPreview" class="camera-preview"></div>
+      <canvas #overlayCanvas class="overlay-canvas"></canvas>
+
+      <!-- Animated Scan Overlay -->
+      @if (isCameraStarted && !isFaceDetected) {
+        <div class="scan-overlay" >
+          <div class="scan-circle"></div>
+          <div class="scan-sweep"></div>
+        </div>
+      }
+
+      @if (!isCameraStarted && capturedImageBase64) {
+        <div class="captured-preview">
+          <img [src]="capturedImageBase64" alt="Captured Photo" />
+          <p class="capture-success">✅ {{ "CAPTURED_SUCCESS" | translate  }}</p>
+        </div>
+      }
+
+
+
+      <!-- <div *ngIf="isCameraStarted && !isFaceDetected" class="detect-message">
+
+      <ion-title size="small">{{ debugMessage }}</ion-title>
+
+    </div> -->
+
+  </div>
+
+  <!-- INFO CARD -->
+  <div class="info-card">
+    <ion-item lines="none">
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+      <ion-label>{{ formData.display_name }}</ion-label>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon name="briefcase-outline" slot="start"></ion-icon>
+      <ion-label>{{ formData.job_id ? formData.job_id : '' }}</ion-label>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon [name]="formData.active ? 'checkmark-circle' : 'close-circle'" [class.active]="formData.active"
+      [class.inactive]="!formData.active" slot="start"></ion-icon>
+      <ion-label>{{ (formData.active ? 'ACTIVE': 'NOT_ACTIVE' )| translate }}</ion-label>
+    </ion-item>
+
+    <ion-button expand="block" color="primary" class="upload-btn" (click)="submitEnrollment()"
+      [disabled]="!formData.display_name || !formData.image_1024">
+      <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+      {{"UPDATE_PHOTO"|translate}}
+    </ion-button>
+  </div>
+</div>
+
+
+<ion-fab  vertical="bottom" horizontal="end" class="capture-fab">
+  <ion-fab-button color="light" (click)="startDetectionLoop()">
+    <ion-icon name="camera-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+</ion-content>
+

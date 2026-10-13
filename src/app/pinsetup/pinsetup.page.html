@@ -1,0 +1,81 @@
+<ion-header class="ion-no-border header-green">
+  <ion-toolbar color="transparent">    
+    <ion-title class="pin-header-title">{{ "MPIN" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding custom-background">
+  <div class="content-wrapper">
+    <h1 class="main-title">{{"CREATE_4_MPIN" | translate}}</h1>
+    <p class="subtitle">
+      {{"CREATE_PIN_MSG" | translate}}
+    </p>
+
+   <div class="input-group">
+  <ion-label class="input-label">{{"MPIN" | translate}}</ion-label>
+  <div class="pin-input-container">
+    <ion-input type="tel" maxlength="4" 
+               [ngModel]="newPin()" 
+               (ngModelChange)="newPin.set($event)"
+               (ionInput)="onNewPinInput()" 
+               class="hidden-input" 
+               #newPinInput
+               inputmode="numeric">
+    </ion-input>
+
+    <div class="pin-visual-wrapper" (click)="newPinInput.setFocus()">
+      @for (i of [0, 1, 2, 3]; track i; let idx = $index) {
+        <div class="pin-box"
+          [class.filled]="newPin() && newPin().length > idx"
+          [class.active]="(newPin().length || 0) === idx && (newPin().length || 0) < 4">
+          @if (newPin() && newPin().length > idx) {
+            <span class="dot">•</span>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+    <div class="input-group confirmation-group">
+     <ion-label class="input-label">{{"CONFIRM_MPIN" | translate }}</ion-label>
+  <div class="pin-input-container">
+    <ion-input type="tel" maxlength="4" 
+               [ngModel]="confirmPin()" 
+               (ngModelChange)="confirmPin.set($event)"
+               (keyup.enter)="savePin()"
+               class="hidden-input" 
+               #confirmPinInput
+               inputmode="numeric">
+    </ion-input>
+
+    <div class="pin-visual-wrapper" (click)="confirmPinInput.setFocus()">
+      @for (i of [0, 1, 2, 3]; track i; let idx = $index) {
+        <div class="pin-box"
+          [class.filled]="confirmPin() && confirmPin().length > idx"
+          [class.active]="newPin().length === 4 && (confirmPin().length || 0) === idx && (confirmPin().length || 0) < 4">
+          @if (confirmPin() && confirmPin().length > idx) {
+            <span class="dot">•</span>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+      <p class="pin-match-message" [class.show]="newPin() && confirmPin() && newPin().length === 4 && newPin() === confirmPin()">
+        {{"MPIN_SAME_MSG" | translate}}
+      </p>
+      <p class="pin-match-message-error" [class.show]="newPin() && confirmPin() && newPin().length === 4 && confirmPin().length === 4 && newPin() !== confirmPin()">
+        {{"MPIN_MISMATCH" | translate}}
+      </p>
+    </div>
+
+    <div class="placeholder-for-button">
+    </div>
+
+    <ion-button expand="block" class="continue-button"
+      [disabled]="!newPin() || !confirmPin() || newPin() !== confirmPin() || newPin().length !== 4" (click)="savePin()">
+      {{"CONTINUE" | translate}}
+    </ion-button>
+  </div>
+</ion-content>

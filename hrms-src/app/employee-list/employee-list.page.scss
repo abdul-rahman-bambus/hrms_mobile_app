@@ -1,0 +1,516 @@
+// =====================================
+// COLOR SYSTEM (Light Theme)
+// =====================================
+$bg-light   : #f5f7fa; // Soft light background
+$card-bg    : #ffffff; // Pure white cards
+$accent     : #2563eb; // Strong primary blue (toolbar text, highlights)
+$accent-glow: #3b82f6; // Lighter blue for effects
+$success    : #10b981; // Green for success
+$danger     : #ef4444; // Red for danger
+$text-dark  : #1f2937; // Dark text for contrast
+$text-muted : #6b7280; // Muted grey text (secondary text, inactive icons)
+$radius     : 16px;
+$shadow     : 0 4px 15px rgba(0, 0, 0, 0.08); // Soft shadow for depth
+$transition : 0.35s cubic-bezier(0.4, 0, 0.2, 1); // Enhanced transition timing
+
+// =====================================
+// PAGE BACKGROUND
+// =====================================
+.fabulous-dark-content {
+  --background    : $bg-light;
+  background      : $bg-light;
+  color           : $text-dark;
+  animation       : fadeIn 0.6s ease both;
+  padding-bottom  : 5px;
+  --padding-top   : 0;
+  --padding-bottom: 0;
+  --padding-start : 0;
+  --padding-end   : 0;
+  overflow-y      : auto;
+}
+
+// =====================================
+// HEADER & TOOLBAR STYLES (Toolbar BG Fixed)
+// =====================================
+ion-header {
+  // Use card-bg (white) for the main header and toolbar background
+  // --background: $card-bg;
+  // background  : $card-bg;
+  color       : $text-dark;
+  box-shadow  : 0 4px 10px rgba(0, 0, 0, 0.05);
+
+  ion-toolbar {
+    --background    : #388E3C; // Ensures toolbar color is white
+    --border-width  : 0;
+    --padding-top   : 0;
+    --padding-bottom: 0;
+    --padding-start : 8px;
+    --padding-end   : 8px;
+    min-height      : 56px;
+
+    .header-title {
+      font-weight            : 700;
+      font-size              : 1.25rem;
+      letter-spacing         : 0.5px;
+      // Style to match image: muted color, close to segment text
+      color                  : $bg-light;
+    }
+
+    ion-button {
+      color         : $bg-light;
+      --ripple-color: rgba($accent, 0.1);
+      transition    : all $transition;
+
+      ion-icon {
+        font-size: 1.4rem;
+      }
+
+      &:hover,
+      &:active {
+        color    : $accent;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  // Segment Filter Tabs
+  .filter-tabs {
+    width          : 90%;
+    margin         : 0 auto;
+    --background   : rgba(255, 255, 255, 0.06);
+    display        : flex;
+    border-radius  : 999px;
+    backdrop-filter: blur(8px);
+    padding        : 4px;
+    box-shadow     : inset 0 0 6px rgba(255, 255, 255, 0.08);
+    justify-content: space-between;
+    overflow       : hidden;
+
+    ion-segment-button {
+      flex                : 1;
+      --color             : #9ca3af;
+      /* muted text */
+      --indicator-color   : transparent;
+      --background-checked: transparent;
+      border-radius       : 999px;
+      transition          : all 0.3s ease;
+      font-weight         : 600;
+      letter-spacing      : 0.5px;
+      text-transform      : uppercase;
+      font-size           : 0.75rem;
+      position            : relative;
+      overflow            : hidden;
+      color               : var(--color);
+
+      ion-label {
+        z-index : 2;
+        position: relative;
+      }
+
+      /* default look */
+      &::after {
+        content      : "";
+        position     : absolute;
+        inset        : 0;
+        background   : transparent;
+        border-radius: 999px;
+        transition   : all 0.3s ease;
+        z-index      : 1;
+      }
+
+      /* active button background + glow */
+      &.segment-button-checked::after {
+        background: linear-gradient(145deg, #2563eb, #1e40af);
+        box-shadow: 0 3px 10px rgba(37, 99, 235, 0.4);
+      }
+
+      /* active text color */
+      &.segment-button-checked {
+        color      : #ffffff;
+        font-weight: 700;
+        transform  : scale(1.03);
+      }
+
+      /* hover or focus effect */
+      &:hover {
+        color: #e5e7eb;
+      }
+    }
+  }
+
+  ion-segment-button[value="enrolled"].segment-button-checked::after {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+  }
+
+  ion-segment-button[value="not_enrolled"].segment-button-checked::after {
+    background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+  }
+
+}
+
+// =====================================
+// PREMIUM SEARCH BAR (Space Fixed)
+// =====================================
+
+.search-header {
+  width : 90%;
+  // Reduced margin-top to remove empty space above search bar
+  margin: 10px auto 25px auto;
+
+  .glass-searchbar {
+    --background       : $card-bg;
+    --color            : #000;
+    --placeholder-color: $text-muted;
+    --icon-color       : $text-muted;
+    --box-shadow       : none;
+
+    border-radius: $radius;
+    box-shadow   : 0 4px 12px rgba(0, 0, 0, 0.1);
+    border       : 1px solid #e5e7eb;
+    transition   : all $transition;
+
+    &:focus-within {
+      border-color: $accent-glow;
+      box-shadow  : 0 4px 18px rgba($accent, 0.3);
+      transform   : scale(1.01);
+      --icon-color: $accent;
+    }
+  }
+}
+
+// =====================================
+// EMPLOYEE LIST (Cards)
+// =====================================
+.fabulous-list {
+  --padding-start : 0;
+  --padding-end   : 0;
+  --padding-top   : 0;
+  --padding-bottom: 0;
+
+  width         : 90%;
+  margin        : 0 auto;
+  display       : flex;
+  flex-direction: column;
+  gap           : 12px;
+  background    : $bg-light;
+}
+
+.fabulous-card {
+  --background       : transparent;
+  --inner-padding-end: 0;
+  --padding-start    : 0;
+  --padding-end      : 0;
+
+  display      : flex;
+  align-items  : center;
+  background   : $card-bg;
+  border-radius: $radius;
+  padding      : 16px;
+  border       : 1px solid #e5e7eb;
+  box-shadow   : $shadow;
+  transition   : transform $transition, box-shadow $transition, border-color $transition;
+  position     : relative;
+  overflow     : hidden;
+
+  // Enormous Hover Effect
+  &:hover {
+    transform   : translateY(-5px) scale(1.01);
+    box-shadow  : 0 15px 30px rgba($accent, 0.18);
+    border-color: rgba($accent, 0.5);
+    cursor      : pointer;
+  }
+
+  .emp-avatar {
+    width        : 60px;
+    height       : 60px;
+    border-radius: 50%;
+    overflow     : hidden;
+    margin-right : 14px;
+    flex-shrink  : 0;
+    border       : 3px solid $bg-light;
+    box-shadow   : 0 0 0 1px #e5e7eb;
+
+    img {
+      width        : 100%;
+      height       : 100%;
+      object-fit   : cover;
+      border-radius: 50%;
+      transition   : transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    &:hover img {
+      transform: scale(1.15);
+    }
+  }
+
+  .emp-details {
+    flex: 1;
+
+    .emp-top {
+      display        : flex;
+      justify-content: space-between;
+      align-items    : center;
+
+      h3 {
+        font-size  : 1.05rem;
+        font-weight: 700;
+        color      : $text-dark;
+      }
+
+      .emp-status {
+        font-size     : 0.7rem;
+        font-weight   : 700;
+        padding       : 5px 10px;
+        text-transform: uppercase;
+        flex-shrink   : 0;
+        transition    : background $transition, color $transition, border $transition;
+
+        &.active {
+          background: rgba($success, 0.1);
+          color     : $success;
+          border    : 1px solid rgba($success, 0.3);
+          animation : statusPulse 1.5s infinite;
+        }
+
+        &.inactive {
+          background: rgba($danger, 0.1);
+          color     : $danger;
+          border    : 1px solid rgba($danger, 0.3);
+        }
+      }
+    }
+
+    .emp-id {
+      margin-top : 4px;
+      font-size  : 0.85rem;
+      color      : $text-muted;
+      font-weight: 500;
+    }
+  }
+}
+
+// =====================================
+// EMPTY STATE
+// =====================================
+.empty-block {
+  text-align: center;
+  margin-top: 100px;
+  position  : relative;
+
+  h2 {
+    color      : $text-dark;
+    font-weight: 700;
+  }
+
+  p {
+    color: $text-muted;
+  }
+
+  .glow-circle {
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+}
+
+// =====================================
+// FLOATING BUTTON (Fixed and Adjusted)
+// =====================================
+.glow-fab {
+  position     : fixed;
+  bottom       : 40px;
+  right        : 28px;
+  z-index      : 100;
+  border-radius: 50%;
+
+  ion-fab-button {
+    // --background: linear-gradient(145deg, $accent-glow, $accent); 
+    --background-activated: $accent;
+    --color               : #fff;
+    // box-shadow: 0 8px 25px rgba($accent, 0.5); 
+    animation             : fabPop 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) both;
+
+    ion-icon {
+      font-size: 1.6rem;
+    }
+  }
+}
+
+// =====================================
+// ENORMOUS ANIMATIONS
+// =====================================
+@keyframes fadeIn {
+  from {
+    opacity  : 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity  : 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    opacity  : 0.6;
+    transform: scale(1) translateX(-50%);
+  }
+
+  50% {
+    opacity  : 1;
+    transform: scale(1.05) translateX(-50%);
+  }
+}
+
+@keyframes fabPop {
+  0% {
+    transform: scale(0.3);
+    opacity  : 0;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity  : 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes textGlow {
+  0% {
+    color      : $text-muted;
+    text-shadow: none;
+  }
+
+  50% {
+    color      : $text-dark;
+    text-shadow: 0 0 5px rgba($accent, 0.4);
+  }
+
+  100% {
+    color      : $text-dark;
+    text-shadow: none;
+  }
+}
+
+@keyframes statusPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($success, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba($success, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba($success, 0);
+  }
+}
+
+
+// =====================================
+// FOOTER MODAL (Popup Menu)
+// =====================================
+ion-footer {
+  --background: $bg-light;
+  background  : $bg-light;
+}
+
+ion-modal.footer-modal {
+
+  height         : auto;
+  --border-radius: 24px 24px 0 0;
+  --box-shadow   : 0 -8px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.modal-options-container {
+  display        : flex;
+  justify-content: space-around;
+  align-items    : flex-start;
+  width          : 90%;
+  margin         : 0 auto;
+  // padding        : 0 10px;
+
+}
+
+.modal-option {
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+  cursor        : pointer;
+  padding       : 5px;
+  transition    : transform $transition;
+
+  .option-icon-wrapper {
+    display           : flex;
+    justify-content   : center;
+    align-items       : center;
+    width             : 60px;
+    height            : 60px;
+    border-radius     : 50%;
+    // margin-bottom     : 0px;
+    // background     : rgba($accent, 0.1);
+    // color             : $accent;
+    transition        : background $transition, box-shadow $transition;
+
+    ion-icon {
+      font-size: 1.75rem;
+    }
+  }
+
+  p {
+    font-size  : 0.8rem;
+    font-weight: 600;
+    color      : $text-muted;
+    margin     : 0 0;
+    margin-bottom: 2rem;
+  }
+}
+
+// Custom styles for Staff/Logs to match the muted colors in the image
+.modal-option.staff {
+  background: rgba(100, 149, 237, 0.2);
+  color     : #789ab6;
+
+}
+
+.modal-option.logs {
+  background: rgba($text-muted, 0.1);
+  color     : $text-muted;
+}
+
+
+// Primary Action (Camera/FAB in the center)
+.modal-option.primary-action {
+  position: relative;
+  top     : -35px;
+
+}
+
+.primary-action .option-icon-wrapper.camera {
+  // Enlarged circle and primary color for the camera icon
+  width : 60px;
+  height: 60px;
+
+  background: $accent;
+  color     : $card-bg;
+  box-shadow: 0 5px 20px rgba($accent, 0.4);
+}
+
+.footer-icon .option-icon-wrapper.staff {
+  --background: rgba(100, 149, 237, 0.2);
+  // color       : #4682b4;
+}
+
+.footer-icon .option-icon-wrapper.logs {
+  --background: rgba($text-muted, 0.1);
+  color       : $text-muted;
+}
+
+.filter-tabs.ion-segment-button {
+  --indicator-color : transparent;
+}

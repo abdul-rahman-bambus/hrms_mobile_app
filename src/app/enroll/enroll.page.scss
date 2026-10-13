@@ -1,102 +1,373 @@
-// SCSS for a cleaner, modern look
-
-// Color variables for consistency
-$camera-bg: #1a1a1a;
-$form-bg: var(--ion-color-light); // Light background for contrast
-$card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-ion-content.camera-content {
-    --background: transparent; // Light grey background for the overall page
-}
-
-// 1. Camera/Photo Area Styling
-.photo-area {
+.page-container {
+    --background   : transparent !important;
+    background     : transparent !important;
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    justify-content: flex-start;
+    height         : 100%;
+    /* Full screen height */
+    overflow       : hidden;
+    /* Stops scroll */
+    position       : relative;
+    touch-action   : none;
     position: relative;
+    /* Prevents elastic scroll on iOS */
+}
+
+
+/* WRAPPER FIX — true centering on all devices */
+.center-wrapper {
+    background     : transparent;
+    width          : 100%;
+    flex           : 1;
+    /* take full vertical space without pushing FAB */
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    justify-content: flex-start;
+    overflow       : hidden;
+}
+
+.overlay-canvas {
+    position  : absolute;
+    inset     : 0;
+    z-index   : 2;
+    background: transparent !important;
+}
+
+
+/* ---------- HEADER ---------- */
+.header-white ion-toolbar {
+    --background: #388E3C;
+    color       : #fff;
+    box-shadow  : 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.toolbar-premium ion-title {
+    display: flex;
+    flex-direction: column;
+    align-items   : center;
+    text-align    : center;
+    --color       : #fff;
+}
+
+
+.title-main {
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.title-sub {
+    font-size: 0.75rem;
+    color    : wheat;
+}
+
+/* ---------- CAMERA ---------- */
+.camera-wrapper {
+    background     : transparent !important;
+    width          : min(90vw, 380px);
+    aspect-ratio   : 3/4;
+    border-radius  : 22px;
+    // margin-top     : 1.2rem;
+    position       : relative;
+    overflow       : hidden;
+    display        : flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.1);
+}
+
+.camera-preview {
+    background   : transparent !important;
+    width        : 100%;
+    height       : 100%;
+    object-fit   : cover;
+    border-radius: 22px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* ---------- SCAN ANIMATION ---------- */
+.scan-overlay {
+    background    : transparent !important;
+    position      : absolute;
+    top           : 50%;
+    left          : 50%;
+    width         : 240px;
+    height        : 240px;
+    transform     : translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.scan-circle {
     width: 100%;
-    height: 350px; 
-    // background: $camera-bg; // Dark background for the camera placeholder
-    overflow: hidden;
-    box-shadow: $card-shadow;
-    
-    .camera-placeholder, .overlay-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 119, 255, 0.4);
+    box-shadow: 0 0 25px rgba(0, 119, 255, 0.3);
+    animation: pulseCircle 2s infinite ease-in-out;
+}
 
-    .captured-image-container {
-        height: 100%;
-        position: relative; // Needed for positioning the label
-        
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    }
-    
-    .photo-status-label {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.7);
-        padding: 8px 15px;
+.scan-sweep {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg,
+            rgba(66, 140, 255, 0.4) 0deg,
+            rgba(66, 140, 255, 0) 60deg,
+            transparent 360deg);
+    animation: rotateSweep 3s linear infinite;
+}
+
+/* ---------- DETECT MESSAGE ---------- */
+.detect-message {
+    position: absolute;
+    bottom: 12px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.9rem;
+    color: red;
+    animation: fadeBlink 1.5s infinite;
+    background: transparent !important;
+}
+
+/* ---------- CAPTURED PREVIEW ---------- */
+.captured-preview {
+    position: absolute;
+    inset: 0;
+    // background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 75%;
+        max-height: 68%;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
         border-radius: 20px;
-        font-weight: 500;
-        color: white;
-        z-index: 15; // Above canvas
-        
-        &.loading-cue {
-            // Add a subtle effect for the loading cue
-            color: var(--ion-color-warning);
-            animation: pulse 1.5s infinite;
+        border: 3px solid #23a858;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        animation: popIn 0.6s ease-out;
+    }
+
+    .capture-success {
+        color: #23a858;
+        font-weight: 600;
+        margin-top: 15px;
+    }
+}
+
+/* ---------- INFO CARD ---------- */
+.info-card {
+    width: min(90vw, 380px);
+    background: #fff;
+    border-radius: 18px;
+    // margin-top: 5%;
+    padding: 0.6rem 1rem 1.2rem;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+ion-item {
+    --background: transparent;
+
+    ion-icon {
+        color: #6c63ff;
+        font-size: 1.3rem;
+        margin-right: 6px;
+    }
+
+    ion-label {
+        color  : #111;
+        --color: #111;
+    }
+}
+
+ion-icon.active {
+    color: #2dd36f !important;
+}
+
+ion-icon.inactive {
+    color: #eb445a !important;
+}
+
+/* ---------- BUTTON ---------- */
+.upload-btn {
+    margin-top: 0.2rem;
+    height: 40px;
+    border-radius: 14px;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(94, 99, 255, 0.3);
+    transition: 0.3s;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(94, 99, 255, 0.45);
+    }
+}
+
+/* ---------- FAB ---------- */
+.capture-fab {
+    // width: 100px;
+    // height: 100px;
+    // position: relative;
+    // margin-bottom: 25%;
+    position: absolute;
+    bottom: 34%;
+    right: 10%;
+
+    ion-fab-button {
+        width        : 78px;
+        height       : 78px;
+        --background : #f8fafc;
+        --background-hover: #eef2ff;
+        --background-activated: #e0e7ff;
+        --color      : #1f2937;
+        --box-shadow : 0 8px 20px rgba(15, 23, 42, 0.18);
+        border-radius: 50%;
+
+        ion-icon {
+            font-size: 3.1rem;
+            color: var(--color);
         }
+
+        animation    : pulse 2.5s infinite;
+        // margin-bottom: 8rem;
+        // margin-left  : 13rem;
+    }
+
+    .camera-idle {
+        --background: #f8fafc;
+        --background-hover: #eef2ff;
+        --background-activated: #e0e7ff;
+        --color: #1f2937;
+        --status-ring: rgba(66, 140, 255, 0.3);
+    }
+
+    .camera-scanning {
+        --background: #2563eb;
+        --background-hover: #1d4ed8;
+        --background-activated: #1e40af;
+        --color: #ffffff;
+        --status-ring: rgba(37, 99, 235, 0.45);
+    }
+
+    .camera-captured {
+        --background: #23a858;
+        --background-hover: #1f934e;
+        --background-activated: #18783f;
+        --color: #ffffff;
+        --status-ring: rgba(35, 168, 88, 0.45);
     }
 }
 
-// 2. Form Styling
-.form-container {
-    padding: 16px 0;
+/* ---------- FOOTER ---------- */
+// .footer-status {
+//   position: fixed;
+//   bottom: 0;
+//   left: 0;
+//   width: 100%;
+//   z-index: 10;
+// }
+
+
+.footer-status ion-toolbar {
+    --background: #111;
+    --color: #fff;
+    text-align: center;
+    font-size: 0.85rem;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 
-.enrollment-list {
-    background: white; // White card background
-    border-radius: 12px;
-    margin: 16px;
-    box-shadow: $card-shadow;
-    overflow: hidden;
+/* ---------- ANIMATIONS ---------- */
+@keyframes pulseCircle {
 
-    ion-item {
-        --background: white;
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
     }
-    
-    ion-input {
-        // Ensure input text is visible and readable
-        --color: #333;
-    }
-    
-    ion-toggle {
-        --handle-background-checked: var(--ion-color-primary);
-    }
-}
 
-
-// 3. Footer/Status Styling
-ion-footer {
-    ion-toolbar {
-        --background: $camera-bg; // Dark background to match camera area
-        --color: white;
-        --padding-top: 5px;
-        --padding-bottom: 5px;
+    50% {
+        transform: scale(1.08);
+        opacity: 0.75;
     }
 }
 
-// Keyframe animation for the loading cue
+@keyframes rotateSweep {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeBlink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    80% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @keyframes pulse {
-    0% { opacity: 0.8; }
-    50% { opacity: 1; }
-    100% { opacity: 0.8; }
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 var(--status-ring, rgba(66, 140, 255, 0.3));
+    }
+
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 14px rgba(66, 140, 255, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(66, 140, 255, 0);
+    }
+}
+
+.hidden {
+  display: none;
 }

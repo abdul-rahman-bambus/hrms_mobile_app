@@ -1,0 +1,82 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="detail-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/settings" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'Plan Details' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="detail-page-content">
+  <div class="detail-page-shell">
+    <div class="detail-hero">
+      <div class="hero-icon">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </div>
+      <h1>{{ 'Plan Details' | translate }}</h1>
+      <p>{{ 'Review the current HRMS plan and the latest saved tenant status from your registered workspace.' | translate }}</p>
+    </div>
+
+    @if (isLoading()) {
+      <div class="loading-state">
+        <ion-spinner name="crescent"></ion-spinner>
+        <span>{{ 'Loading plan details...' | translate }}</span>
+      </div>
+    } @else {
+      <ion-card class="detail-card">
+        <ion-card-content>
+          <div class="plan-headline">
+            <div>
+              <div class="eyebrow">{{ 'Current Plan' | translate }}</div>
+              <h2>{{ planDisplayLabel() | translate }}</h2>
+            </div>
+            <div class="status-chip" [ngClass]="statusClass()">
+              {{ statusDisplayLabel() | translate }}
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-tile">
+              <span>{{ 'Company Name' | translate }}</span>
+              <strong>{{ details().companyName || ('Not available' | translate) }}</strong>
+            </div>
+            <div class="info-tile">
+              <span>{{ 'Database Name' | translate }}</span>
+              <strong>{{ details().businessName || ('Not available' | translate) }}</strong>
+            </div>
+            <div class="info-tile">
+              <span>{{ expiryLabel() | translate }}</span>
+              <strong>{{ expiryValue() | translate }}</strong>
+            </div>
+            <div class="info-tile">
+              <span>{{ 'Username' | translate }}</span>
+              <strong>{{ details().username || ('Not available' | translate) }}</strong>
+            </div>
+            <div class="info-tile">
+              <span>{{ 'Tenant State' | translate }}</span>
+              <strong>{{ provisionStatusLabel() | translate }}</strong>
+            </div>
+          </div>
+
+          @if (isExpiringSoon()) {
+            <div class="renewal-action-container" style="margin-top: 20px; text-align: center;">
+              <ion-button expand="block" color="warning" (click)="goToRenewal()">
+                {{ 'Renew License' | translate }}
+              </ion-button>
+            </div>
+          }
+
+          <div class="status-note">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span>{{ details().url || ('Tenant URL is not available yet. Complete tenant setup or refresh later.' | translate) }}</span>
+          </div>
+
+          <ion-button expand="block" class="refresh-btn" (click)="refresh()">
+            <ion-icon slot="start" name="cloud-outline"></ion-icon>
+            {{ 'Refresh Status' | translate }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    }
+  </div>
+</ion-content>
