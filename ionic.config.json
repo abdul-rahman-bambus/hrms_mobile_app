@@ -1,0 +1,7 @@
+{
+  "name": "HRMS-App",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

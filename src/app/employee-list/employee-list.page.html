@@ -1,0 +1,103 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+   
+
+    <ion-buttons slot="end">
+       <ion-button (click)="syncUsers()" fill="clear">
+        Sync Users
+      </ion-button>
+      <ion-button><ion-icon slot="icon-only" name="search-outline"></ion-icon></ion-button>
+      <ion-button><ion-icon slot="icon-only" name="notifications-outline"></ion-icon></ion-button>
+
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="content-header">
+    <h1>Employee</h1>
+
+    <div class="search-bar-container">
+      <ion-searchbar 
+        placeholder="Search employee"
+        (ionInput)="onSearchInput($event)"
+        class="custom-search"
+        debounce="300"
+      ></ion-searchbar>
+      <ion-button color="success" size="default" class="add-button">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </div>
+
+    <ion-segment 
+      [value]="filterStatus" 
+      (ionChange)="segmentChanged($event)"
+      mode="md"
+      class="filter-segment"
+    >
+      <ion-segment-button value="All">
+        <ion-label>All</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Active">
+        <ion-label>Active</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Inactive">
+        <ion-label>Inactive</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <ion-list lines="none" class="employee-list-card">
+    <ng-container>
+      <ion-item *ngIf="loading">
+  <ion-spinner name="circular"></ion-spinner>
+</ion-item>
+    <ion-item *ngFor="let emp of filteredEmployees" class="employee-item" (click)="openEnrollmentForm(emp)" detail="false">
+      <ion-avatar slot="start" class="employee-avatar">
+        <img [src]="emp.image_128?('data:image/png;base64,'+emp.image_128) :'../../assets/person.png'" [alt]="emp.display_name">
+      </ion-avatar>
+
+      <ion-label>
+        <div class="status-tags">
+          <ion-chip color="success" [outline]="true" size="small" *ngIf="emp.active">
+           Active
+          </ion-chip>
+           <ion-chip color="danger" [outline]="true" size="small" *ngIf="!emp.active">
+           Archived
+          </ion-chip>
+        </div>
+
+        <h2>{{ emp.display_name }}</h2>
+        <p>{{ emp.job_id[1] }}</p>
+      </ion-label>
+      
+      <ion-icon slot="end"  name="ellipsis-vertical" color="medium"></ion-icon>
+    </ion-item>
+    </ng-container>
+  </ion-list>
+</ion-content>
+
+<ion-footer class="custom-footer">
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom" class="custom-tab-bar">
+        <ion-tab-button class="active-tab">
+          <ion-icon name="home"></ion-icon>
+          <ion-label>Home</ion-label>
+        </ion-tab-button>
+        <ion-tab-button>
+          <ion-icon name="calendar-number"></ion-icon>
+        </ion-tab-button>
+        <ion-tab-button>
+          <ion-icon name="location"></ion-icon>
+        </ion-tab-button>
+        <ion-tab-button>
+          <ion-icon name="document-text"></ion-icon>
+        </ion-tab-button>
+        <ion-tab-button>
+          <ion-icon name="help-circle"></ion-icon>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

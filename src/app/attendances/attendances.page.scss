@@ -1,0 +1,105 @@
+// ion-header {
+//     ion-toolbar {
+//       --background: var(--ion-color-primary);
+//       --color: #fff;
+//     }
+//   }
+  
+  .filter-section {
+    padding: 1rem;
+  
+    ion-item {
+      margin-bottom: 10px;
+      border-radius: 12px;
+      --background: #f5f5f5;
+    }
+  
+    .date-filters {
+        display: flex;
+        gap: 10px;       // space between From and To
+        margin-bottom: 10px;
+      
+        .date-item {
+          flex: 1;       // both inputs take equal width
+          --background: #f9f9f9;
+        }
+      
+        ion-input {
+          font-size: 0.95rem;
+        }
+      }
+      .date-filters ion-item {
+        --background: #f9f9f9;
+      }
+      
+  
+    ion-button {
+      margin-top: 8px;
+      border-radius: 12px;
+    }
+  }
+  
+  ion-list {
+    padding: 0 1rem;
+  
+    ion-item {
+      margin-bottom: 10px;
+      border-radius: 12px;
+      --background: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+      h2 {
+        font-weight: 600;
+        color: var(--ion-color-dark);
+      }
+  
+      p {
+        margin-top: 4px;
+        font-size: 0.9rem;
+        color: var(--ion-color-medium);
+        line-height: 1.4;
+      }
+    }
+  }
+  
+  .spinner-center {
+    display: block;
+    margin: 40px auto;
+  }
+  
+  .no-data {
+    text-align: center;
+    color: var(--ion-color-medium);
+    margin-top: 2rem;
+  
+    ion-icon {
+      font-size: 2rem;
+      color: var(--ion-color-warning);
+    }
+  
+    p {
+      margin-top: 6px;
+      font-size: 1rem;
+    }
+  }
+
+  .filter-container {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #fff;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .attendance-list-wrapper {
+    height: calc(100vh - 150px); // adjust depending on header + filter height
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; // smooth scroll
+    scrollbar-width: none; // Firefox
+  }
+  
+  .attendance-list-wrapper::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Edge
+  }
+  

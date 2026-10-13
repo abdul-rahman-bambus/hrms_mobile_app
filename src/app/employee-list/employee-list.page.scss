@@ -1,0 +1,181 @@
+// Variables for colors matching the design aesthetic
+$primary-green: #38b000; // Placeholder for the CareSync green
+$card-bg: white;
+$text-light: #999;
+
+ion-content {
+  // Setting a slightly off-white background color
+  --background: #f0f0f0; 
+}
+
+// ion-header {
+//   // Use a transparent header to blend with the content area
+//   ion-toolbar {
+//     --background: transparent;
+//     --border-width: 0;
+//   }
+// }
+
+// Custom styles for the top area
+.content-header {
+  padding: 10px 16px 0 16px;
+  background: $card-bg; 
+  border-radius: 0 0 25px 25px; // Only bottom corners rounded
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+  }
+}
+
+.logo-image {
+    height: 25px;
+    margin-right: 10px;
+}
+
+.user-avatar-small {
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+}
+
+// Search and Add Button Layout
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  
+  .custom-search {
+    --background: #f0f0f0;
+    --border-radius: 12px;
+    --box-shadow: none;
+    padding: 0;
+  }
+
+  .add-button {
+    --border-radius: 12px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --background: $primary-green;
+    height: 44px; // Match searchbar height
+  }
+}
+
+// Filter Segment Styling (Mimicking the dropdown look)
+.filter-segment {
+    --background: $card-bg;
+    --color: #333;
+    --color-selected: $primary-green;
+    border: none;
+    justify-content: flex-start;
+    
+    ion-segment-button {
+        --padding-start: 12px;
+        --padding-end: 12px;
+        --indicator-color: transparent; // Hide default indicator
+        
+        &.segment-button-checked {
+            font-weight: 600;
+            --color: $primary-green;
+            // Mimic the rounded pill background when selected
+            border-radius: 20px;
+            background: rgba($primary-green, 0.1); 
+        }
+    }
+}
+
+// Employee List Card Look
+.employee-list-card {
+  background: $card-bg;
+  margin: 16px;
+  border-radius: 15px;
+  overflow: hidden; // Ensures items don't overflow the rounded corners
+  padding: 0 8px; // Inner padding
+
+  .employee-item {
+    padding: 10px 0;
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 8px;
+  }
+  
+  .employee-avatar {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  ion-label {
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin-top: 5px;
+    }
+    p {
+      color: $text-light;
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+  }
+}
+
+.status-tags {
+    margin-bottom: 5px;
+    display: flex;
+    gap: 8px;
+
+    ion-chip {
+        --background: transparent;
+        border-width: 1px;
+        font-weight: 600;
+    }
+    
+    // Active status styling
+    ion-chip[color="success"] {
+        --color: $primary-green;
+        --border-color: $primary-green;
+    }
+    
+    // Full-time/Part-time status styling (medium)
+    ion-chip[color="medium"] {
+        --color: $text-light;
+        --border-color: #ddd;
+    }
+}
+
+
+// Custom Footer/Tab Bar (Mimicking iOS look)
+.custom-footer {
+    ion-toolbar {
+        --background: $card-bg;
+        --border-width: 0; // Remove the top border
+        padding-bottom: env(safe-area-inset-bottom); // Account for iOS home bar
+    }
+    
+    .custom-tab-bar {
+        --background: transparent;
+        border-top: 1px solid #eee;
+        
+        ion-tab-button {
+            --color: #777;
+            --color-selected: #000;
+            font-size: 0.7rem;
+            
+            &.active-tab {
+                ion-icon {
+                    color: black;
+                }
+                ion-label {
+                    color: black;
+                }
+            }
+        }
+    }
+}

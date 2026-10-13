@@ -1,0 +1,102 @@
+// SCSS for a cleaner, modern look
+
+// Color variables for consistency
+$camera-bg: #1a1a1a;
+$form-bg: var(--ion-color-light); // Light background for contrast
+$card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+ion-content.camera-content {
+    --background: transparent; // Light grey background for the overall page
+}
+
+// 1. Camera/Photo Area Styling
+.photo-area {
+    position: relative;
+    width: 100%;
+    height: 350px; 
+    // background: $camera-bg; // Dark background for the camera placeholder
+    overflow: hidden;
+    box-shadow: $card-shadow;
+    
+    .camera-placeholder, .overlay-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .captured-image-container {
+        height: 100%;
+        position: relative; // Needed for positioning the label
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    
+    .photo-status-label {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: 500;
+        color: white;
+        z-index: 15; // Above canvas
+        
+        &.loading-cue {
+            // Add a subtle effect for the loading cue
+            color: var(--ion-color-warning);
+            animation: pulse 1.5s infinite;
+        }
+    }
+}
+
+// 2. Form Styling
+.form-container {
+    padding: 16px 0;
+}
+
+.enrollment-list {
+    background: white; // White card background
+    border-radius: 12px;
+    margin: 16px;
+    box-shadow: $card-shadow;
+    overflow: hidden;
+
+    ion-item {
+        --background: white;
+    }
+    
+    ion-input {
+        // Ensure input text is visible and readable
+        --color: #333;
+    }
+    
+    ion-toggle {
+        --handle-background-checked: var(--ion-color-primary);
+    }
+}
+
+
+// 3. Footer/Status Styling
+ion-footer {
+    ion-toolbar {
+        --background: $camera-bg; // Dark background to match camera area
+        --color: white;
+        --padding-top: 5px;
+        --padding-bottom: 5px;
+    }
+}
+
+// Keyframe animation for the loading cue
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}

@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar >
+    <ion-title>Employee Attendance</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="attendance-content">
+
+  <!-- Sticky Filters -->
+  <div class="filter-container">
+    <ion-item>
+      <ion-input
+        placeholder="Search Employee Name"
+        [(ngModel)]="employeeSearch"
+        (ionInput)="filterData()"
+        clear-input>
+      </ion-input>
+    </ion-item>
+
+    <div class="date-filters">
+      <ion-grid>
+        <ion-row gutter="10px">
+          <ion-col size="6">
+            <ion-item>
+              <ion-label position="stacked">From Date</ion-label>
+              <ion-input
+                type="date"
+                [(ngModel)]="fromDate"
+                (ionChange)="filterData()">
+              </ion-input>
+            </ion-item>
+          </ion-col>
+    
+          <ion-col size="6">
+            <ion-item>
+              <ion-label position="stacked">To Date</ion-label>
+              <ion-input
+                type="date"
+                [(ngModel)]="toDate"
+                (ionChange)="filterData()">
+              </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    
+
+    <ion-button expand="block" color="medium" (click)="clearFilters()">
+      Clear Filters
+    </ion-button>
+  </div>
+
+  <!-- Scrollable Attendance List -->
+  <div class="attendance-list-wrapper">
+    <ion-spinner *ngIf="loading" name="crescent" class="spinner-center"></ion-spinner>
+
+    <ion-list *ngIf="!loading && filteredAttendances.length > 0">
+      <ion-item *ngFor="let att of filteredAttendances">
+        <ion-label>
+          <h2>{{ att.employee_name }}</h2>
+          <p>
+            <strong>Check In:</strong> {{ att.check_in || 'N/A' }}<br />
+            <strong>Check Out:</strong> {{ att.check_out || 'N/A' }}<br />
+            <strong>Worked Hours:</strong> {{ att.worked_hours || 0 }}
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="!loading && filteredAttendances.length === 0" class="no-data">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>No records found</p>
+    </div>
+  </div>
+
+</ion-content>

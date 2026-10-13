@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <ion-back-button defaultHref="/employee-list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Auto Face Enrollment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  class="camera-content" color="light">
+  <ion-progress-bar *ngIf="networkProgress" type="indeterminate"></ion-progress-bar>
+
+
+  <div #cameraPreview id="cameraPreview"  class="camera-placeholder"></div>
+    <canvas #overlayCanvas class="overlay-canvas"></canvas>
+
+ 
+</ion-content>
+ <ion-footer class="ion-no-border">
+   <div class="photo-area">
+   
+
+    <div *ngIf="!isCameraStarted && capturedImageBase64" class="captured-image-container">
+      <img [src]="capturedImageBase64" alt="Captured Employee Photo">
+      <ion-label color="success" class="photo-status-label">Photo Captured Successfully! ✅</ion-label>
+    </div>
+    
+    <ion-label *ngIf="isCameraStarted && !isFaceDetected" class="photo-status-label loading-cue">
+        Centering Face for Capture...
+    </ion-label>
+    
+  </div>
+
+  <div class="form-container">
+    <ion-button color="medium" style="width: 90vw;margin-left: 5vw;" (click)="startDetectionLoop()"><ion-icon name='camera-outline'></ion-icon></ion-button>
+    <ion-list class="enrollment-list ion-padding-vertical">
+      <ion-item lines="full">
+        <ion-icon name="person-outline"/>
+         <span>{{formData.display_name}}</span>
+       
+      </ion-item>
+      
+      <ion-item lines="full">
+        <ion-icon name="bag-outline"/>
+        <span>{{formData.job_id?formData.job_id[1]:''}}</span>
+      </ion-item>
+      
+      <ion-item lines="none">
+        <ion-icon style="color:green"  *ngIf="formData.active" name="checkmark-circle-sharp"/>
+        <ion-icon style="color:red"  *ngIf="!formData.active" name="close-circle-sharp"/>
+      <span>{{formData.active?"Active":"Inactive"}}</span>
+      </ion-item>
+    </ion-list>
+    
+    <ion-button 
+      expand="block" 
+      color="primary" 
+      class="ion-margin-horizontal"
+      (click)="submitEnrollment()" 
+      [disabled]="!formData.display_name || !formData.image_128 || formData.job_id === null"
+    >
+      <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+      Update Photo
+    </ion-button>
+  </div>
+    <ion-toolbar color="dark">
+      <ion-title size="small" class="ion-text-center">Status: {{ debugMessage }}</ion-title>
+    </ion-toolbar>
+  </ion-footer>

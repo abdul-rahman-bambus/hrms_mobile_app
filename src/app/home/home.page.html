@@ -1,0 +1,75 @@
+<ion-header >
+  <ion-toolbar>
+    
+    <ion-buttons slot="start">
+      <ion-button>
+      <img height="30" width="30" style="border-radius: 5px;margin-left: 5px;" src="../../assets/icon/icon.png"/>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Face Recognition</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light"  (click)="goToEmployees()">
+        <ion-icon name="people-outline"></ion-icon>
+      </ion-button>
+      <ion-button color="light"  (click)="goToAttendance()">
+        <ion-icon name="receipt-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  class="camera-content" [fullscreen]="false">
+  <div style="width: 100%;height: 100%;" *ngIf="loading">
+    <ion-spinner style="font-size:30px;margin-top: 65%;margin-left: 45%;" name="circular"></ion-spinner>
+  </div>
+  <div #cameraPreview id="cameraPreview"></div>
+  <canvas #overlayCanvas class="overlay-canvas"></canvas>
+
+
+</ion-content>
+<ion-footer class="ion-no-border">
+
+
+  <!-- <div  style="text-align: center;width: 100vw;">
+    <div >
+      <h3> Welcome back<br />
+        {{detectedEmployee?.display_name}}</h3> <br /> <ion-icon style="font-size: 80px;" color="success"
+        name="checkmark-circle"></ion-icon>
+    </div>
+    <div *ngIf="operation==='out'">
+      <h3> Good Bye<br />
+        {{detectedEmployee.display_name}}</h3> <br /> <ion-icon style="font-size: 40px;" color="warning"
+        name="checkmark-circle"></ion-icon>
+    </div>
+  </div> -->
+
+  <div *ngIf="detectedEmployee" style="text-align: center;width: 100vw;" class="footer-status">
+    <div *ngIf="operation==='in'">
+      <h3> Welcome back<br />
+        {{detectedEmployee.display_name}}<br/>
+      
+      </h3> <br /> <ion-icon style="font-size: 80px;" color="success"
+        name="checkmark-circle"></ion-icon>
+    </div>
+    <div *ngIf="operation==='out'">
+      <h3> Good Bye<br />
+        {{detectedEmployee.display_name}}</h3> <br /> <ion-icon style="font-size: 40px;" color="warning"
+        name="checkmark-circle"></ion-icon>
+    </div>
+    <div *ngIf="operation===null">
+      <h3> This person not enrolled yet. Kindly enroll.</h3><br /> <ion-icon style="font-size: 40px;" color="danger"
+      name="close-circle"></ion-icon>
+    </div>
+  </div>
+  <div *ngIf="!detectedEmployee && !loading" style="text-align: center;width: 100vw;">
+    <img height="150" width="150" src="../../assets/face.gif"/>
+  </div>
+
+  <ion-toolbar>
+    <ion-title size="small">Attendance System</ion-title>
+   
+
+  </ion-toolbar>
+
+
+</ion-footer>
